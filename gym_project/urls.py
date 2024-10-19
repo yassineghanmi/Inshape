@@ -33,4 +33,6 @@ urlpatterns = [
     path('about-us/', views.about_us, name='about_us'),
     path('admin/', admin.site.urls),
     path('api/exercises/', include('workouts.urls')),
+    path('accounts/', include('django.contrib.auth.urls')),
+
 ]
