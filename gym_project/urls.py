@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
-
+from gym_project.views import registration_view, profile
 from gym_project import views
 
 urlpatterns = [
@@ -45,5 +45,8 @@ urlpatterns = [
         name='password_reset'
     ),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/register/', registration_view, name='register'),
+    path("accounts/profile/", profile, name="profile"),
+
 
 ]
