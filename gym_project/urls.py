@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
 
 from gym_project import views
 
@@ -33,6 +34,16 @@ urlpatterns = [
     path('about-us/', views.about_us, name='about_us'),
     path('admin/', admin.site.urls),
     path('api/exercises/', include('workouts.urls')),
+     # Authentication URLs (customize password reset email here)
+    path(
+        'accounts/password_reset/',
+        auth_views.PasswordResetView.as_view(
+            template_name='registration/password_reset_form.html',
+            email_template_name='registration/password_reset_email.html',
+            extra_context={'protocol': 'http', 'domain': '127.0.0.1:8000'}
+        ),
+        name='password_reset'
+    ),
     path('accounts/', include('django.contrib.auth.urls')),
 
 ]
