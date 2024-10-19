@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+dist/
+build/
+
+# Django stuff:
+*.log
+local_settings.py
+db.sqlite3
+/media
+/staticfiles
+*.pot
+*.pyc
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VS Code settings
+.vscode/
+
+# PyCharm
+.idea/
+
+# Backup files
+*~
+*.bak
+*.tmp
+
+# Secrets
+secrets.json
+
+/gym_project/.env
