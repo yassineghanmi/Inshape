@@ -141,3 +141,6 @@ EMAIL_HOST_USER = os.environ.get('MAIL')  # Your Gmail address
 EMAIL_HOST_PASSWORD = os.environ.get('Mail_PASSWORD')  # App password or Gmail password
 DEFAULT_FROM_EMAIL = os.environ.get('MAIL')  # Same Gmail address
 EMAIL_SUBJECT_PREFIX = "Password Recovery"
+
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/profile/'
