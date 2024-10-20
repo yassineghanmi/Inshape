@@ -11,7 +11,10 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 import os
 from pathlib import Path
+from dotenv import load_dotenv
 
+
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -125,3 +128,19 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+mail = os.environ.get('MAIL')
+mail_pass = os.environ.get('Mail_PASSWORD')
+print(f"Mail: {mail}, Password: {mail_pass}") 
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('MAIL')  # Your Gmail address
+EMAIL_HOST_PASSWORD = os.environ.get('Mail_PASSWORD')  # App password or Gmail password
+DEFAULT_FROM_EMAIL = os.environ.get('MAIL')  # Same Gmail address
+EMAIL_SUBJECT_PREFIX = "Password Recovery"
+
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/accounts/profile/'
