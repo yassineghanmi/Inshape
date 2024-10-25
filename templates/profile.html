@@ -5,56 +5,114 @@
 
 {% block content %}
 
-<section class="hero-section d-flex justify-content-center align-items-center" style="background-color: #111; height: 100vh;">
-    <div class="container" style="width: 80%; ">
+<section class="hero-section d-flex justify-content-center align-items-center" style="background-color: #111; height: 150vh;">
+    <div class="container" style="width: 80%;">
         <div class="row justify-content-center">
             <div class="col-12">
                 <div class="form-container p-4">
                     {% if user.is_authenticated %}
-                      
 
-                        <!-- User Profile Section -->
                         <section class="vh-100">
-                          <div class="container py-5 h-100">
-                            <div class="row d-flex justify-content-center align-items-center h-100">
-                              <div class="col-md-12 col-xl-4">
+                            <div class="container py-5 h-100">
+                                <div class="row d-flex align-items-start h-100">
+                                    
+                                    <!-- User Profile Section -->
+                                    <div class="col-12 mb-4">
+                                        <div class="card" style="border-radius: 15px; background-color: #f8f9fa; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                                            <div class="card-body text-center" style="padding: 2rem;">
+                                                <p class="text-black" style="font-size: 1.2rem; font-weight: 500;">
+                                                    Welcome, {{ user.username }}. Thanks for logging in.
+                                                </p>
+                                                <div class="mt-3 mb-4">
+                                                    <img src="https://flajki.com/cdn/shop/files/52.png?v=1722699202"
+                                                        class="rounded-circle img-fluid" 
+                                                        style="width: 100px; height: 100px; border: 2px solid #007bff;" />
+                                                </div>
+                                                <h4 class="mb-2" style="font-size: 1.5rem; font-weight: 600;">
+                                                    {{ user.first_name }} {{ user.last_name }}
+                                                </h4>
+                                                <p class="text-muted mb-4" style="font-size: 1rem;">
+                                                    @{{ user.username }} 
+                                                    <span class="mx-2">|</span> 
+                                                    <a href="#!" style="color: #007bff; text-decoration: none;">
+                                                        {{ user.email }}
+                                                    </a>
+                                                </p>
 
-                                <div class="card" style="border-radius: 15px; background-color: #f8f9fa; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
-                                    <div class="card-body text-center" style="padding: 2rem;">
-                                        <p class="text-black" style="font-size: 1.2rem; font-weight: 500;">Welcome, {{ user.username }}. Thanks for logging in.</p>
-                                        <div class="mt-3 mb-4">
-                                            <img src="https://flajki.com/cdn/shop/files/52.png?v=1722699202"
-                                                class="rounded-circle img-fluid" style="width: 100px; height: 100px; border: 2px solid #007bff;" />
+                                                <form action="{% url 'logout' %}" method="post">
+                                                    {% csrf_token %}
+                                                    <button type="submit" data-mdb-button-init data-mdb-ripple-init 
+                                                            class="btn btn-danger btn-rounded btn-lg" 
+                                                            style="padding: 0.5rem 1.5rem; font-size: 1.1rem; transition: background-color 0.3s;">
+                                                        Logout
+                                                    </button>
+                                                </form>
+                                            </div>
                                         </div>
-                                        <h4 class="mb-2" style="font-size: 1.5rem; font-weight: 600;">{{ user.first_name }} {{ user.last_name }}</h4>
-                                        <p class="text-muted mb-4" style="font-size: 1rem;">@{{ user.username }} <span class="mx-2">|</span> <a href="#!" style="color: #007bff; text-decoration: none;">{{ user.email }}</a></p>
-                                
-                                        <form action="{% url 'logout' %}" method="post">
-                                            {% csrf_token %}
-                                            <button type="submit" data-mdb-button-init data-mdb-ripple-init 
-                                                    class="btn btn-danger btn-rounded btn-lg" 
-                                                    style="padding: 0.5rem 1.5rem; font-size: 1.1rem; transition: background-color 0.3s;">
-                                                Logout
-                                            </button>
-                                        </form>
                                     </div>
-                                </div>
-                                
 
-                              </div>
+                                    <!-- Live Chat Section -->
+                                    <div class="col-12">
+                                        <div class="card" style="border-radius: 15px; width: 100%;">
+                                            <div class="d-flex flex-row justify-content-center p-3 adiv text-black">
+                                                <span class="pb-3">Live chat</span>
+                                            </div>
+                                            <div class="d-flex flex-row p-3">
+                                                <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="30" height="30">
+                                                <div class="chat ml-2 p-3">Hello and thank you for visiting birdlymind. Please click the video above</div>
+                                            </div>
+
+                                            <div class="d-flex flex-row justify-content-end p-3">
+                                                <div class="bg-white mr-2 p-3" style="border: 1px solid #E7E7E9; font-size: 10px; border-radius: 20px;">
+                                                    <span class="text-muted">Hello and thank you for visiting birdlymind.</span>
+                                                </div>
+                                                <img src="https://img.icons8.com/color/48/000000/circled-user-male-skin-type-7.png" width="30" height="30">
+                                            </div>
+
+                                            <div class="d-flex flex-row p-3">
+                                                <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="30" height="30">
+                                                <div class="myvideo ml-2">
+                                                    <img src="https://imgur.com/GOxU1jx.png" width="200">
+                                                </div>
+                                            </div>
+
+                                            <div class="d-flex flex-row p-3">
+                                                <img src="https://img.icons8.com/color/48/000000/circled-user-female-skin-type-7.png" width="30" height="30">
+                                                <div class="chat ml-2 p-3">
+                                                    <span class="text-muted dot">. . .</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group px-3">
+                                                <div class="input-group">
+                                                    <textarea class="form-control" rows="1" placeholder="Type your message" style="border-radius: 12px; border: 1px solid #F0F0F0; font-size: 8px;"></textarea>
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-danger" type="button" style="border-radius: 12px; padding: 0.5rem 1rem; font-size: 8px;">
+                                                            Send
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
-                          </div>
                         </section>
+
                     {% else %}
                         <form>
                             <p class="text-white">Welcome, new user. Please log in.</p>
-                            <p><a href="{% url 'login' %}" class="text-primary">Login</a> or <a href="{% url 'register' %}" class="text-primary">Register</a></p>
+                            <p>
+                                <a href="{% url 'login' %}" class="text-primary">Login</a> or 
+                                <a href="{% url 'register' %}" class="text-primary">Register</a>
+                            </p>
                         </form>
                     {% endif %}
                 </div>
-                
             </div>
         </div>
     </div>
 </section>
+
 {% endblock %}
