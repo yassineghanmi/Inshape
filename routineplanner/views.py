@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from .forms import RoutineForm  # Updated import for the new RoutineForm
 from .models import Routine  # Import your Routine model
 import google.generativeai as genai
+import json  # Make sure to import the json module
 
 # Configure your AI model
 genai.configure(api_key="AIzaSyDd9RRJuKh0b4RDo45KMV3mPuqkVf8upe0")  # Replace with your actual API key
@@ -37,7 +38,72 @@ def workout_view(request):
         }
 
         # Format the prompt for the AI
-        prompt = f"Recommend me a workout routine using this data: {workout_data}"
+        prompt = (
+    f"Create a workout routine based on this data {workout_data}, ensuring it follows this exact JSON structure. "
+    "Do not alter any fields or structure; fill in the fields with specific details as applicable to the user’s input. "
+    "Use the same field names, order, and structure as in the template provided below:\n"
+    "{\n"
+    "  \"routine\": {\n"
+    "    \"Monday\": {\n"
+    "      \"name\": \"\",\n"
+    "      \"duration\": 0,\n"
+    "      \"exercises\": [\n"
+    "        {\n"
+    "          \"name\": \"\",\n"
+    "          \"sets\": 0,\n"
+    "          \"reps\": \"\",\n"
+    "          \"rest\": 0,\n"
+    "          \"equipment\": \"\"\n"
+    "        }\n"
+    "      ],\n"
+    "      \"cardio\": {\n"
+    "        \"type\": \"\",\n"
+    "        \"duration\": 0,\n"
+    "        \"intensity\": \"\"\n"
+    "      }\n"
+    "    },\n"
+    "    \"Wednesday\": {\n"
+    "      \"name\": \"\",\n"
+    "      \"duration\": 0,\n"
+    "      \"exercises\": [\n"
+    "        {\n"
+    "          \"name\": \"\",\n"
+    "          \"sets\": 0,\n"
+    "          \"reps\": \"\",\n"
+    "          \"rest\": 0,\n"
+    "          \"equipment\": \"\"\n"
+    "        }\n"
+    "      ],\n"
+    "      \"cardio\": {\n"
+    "        \"type\": \"\",\n"
+    "        \"duration\": 0,\n"
+    "        \"intensity\": \"\"\n"
+    "      }\n"
+    "    },\n"
+    "    \"Friday\": {\n"
+    "      \"name\": \"\",\n"
+    "      \"duration\": 0,\n"
+    "      \"exercises\": [\n"
+    "        {\n"
+    "          \"name\": \"\",\n"
+    "          \"sets\": 0,\n"
+    "          \"reps\": \"\",\n"
+    "          \"rest\": 0,\n"
+    "          \"equipment\": \"\"\n"
+    "        }\n"
+    "      ],\n"
+    "      \"cardio\": {\n"
+    "        \"type\": \"\",\n"
+    "        \"duration\": 0,\n"
+    "        \"intensity\": \"\"\n"
+    "      }\n"
+    "    }\n"
+    "  },\n"
+    "  \"notes\": \"\"\n"
+    "}"
+)
+
+
 
         # Start a chat session and send the prompt to the AI
         chat_session = model.start_chat()
@@ -74,4 +140,12 @@ def save_routine(request):
     return redirect('workout_form')  # Or wherever you want to redirect if the method is not POST
 def success_view(request):
     routines = Routine.objects.all()  # Retrieve all routines from the database
+    
+    # Parse the details for each routine
+    for routine in routines:
+        try:
+            routine.details = json.loads(routine.details)  # Convert JSON string to dict
+        except json.JSONDecodeError:
+            routine.details = {}  # If parsing fails, set to empty dict or handle accordingly
+
     return render(request, 'routine_planner/success.html', {'routines': routines})

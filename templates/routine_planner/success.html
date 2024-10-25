@@ -16,7 +16,33 @@
             <li>
                 <strong>Routine Name:</strong> {{ routine.name }}<br>
                 <strong>Created By:</strong> {{ routine.created_by }}<br>
-                <strong>Details:</strong> {{ routine.details }}<br>
+                <strong>Details:</strong><br>
+                
+                <ul>
+                    {% for day, details in routine.details.routine.items %}
+                        <li>
+                            <strong>{{ day }}:</strong> {{ details.name }}<br>
+                            <strong>Duration:</strong> {{ details.duration }} minutes<br>
+                            
+                            <strong>Exercises:</strong>
+                            <ul>
+                                {% for exercise in details.exercises %}
+                                    <li>
+                                        <strong>{{ exercise.name }}</strong><br>
+                                        Sets: {{ exercise.sets }}, Reps: {{ exercise.reps }}, Rest: {{ exercise.rest }} seconds, Equipment: {{ exercise.equipment }}
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                            
+                            <strong>Cardio:</strong> {{ details.cardio.type }}, Duration: {{ details.cardio.duration }} minutes, Intensity: {{ details.cardio.intensity }}
+                        </li>
+                        <strong>Notes:</strong> {{ routine.details.notes }}<br>
+
+                    {% empty %}
+                        <li>No details found for this routine.</li>
+                    {% endfor %}
+                </ul>
+
             </li>
         {% empty %}
             <li>No routines found.</li>
