@@ -21,8 +21,8 @@ def workout_view(request):
         experience_level = request.POST.get('experience_level')
         duration = request.POST.get('duration')
         workout_type = request.POST.get('workout_type')
-        target_muscle_groups = request.POST.get('target_muscle_groups').split()  # Assuming space-separated input
-        equipment_needed = request.POST.get('equipment_needed').split()  # Assuming space-separated input
+        target_muscle_groups = request.POST.get('target_muscle_groups').split(",")  # Assuming comma-separated input
+        equipment_needed = request.POST.get('equipment_needed').split(",")  # Assuming comma-separated input
         sessions_per_week = request.POST.get('sessions_per_week')
 
         # Prepare the workout data dictionary
@@ -46,18 +46,32 @@ def workout_view(request):
         # Get the AI's response
         generated_routine = response.text  # The generated routine details
         
+        # Redirect to the preview page with the generated routine
+        return render(request, 'routine_planner/workout_result.html', {
+            'generated_routine': generated_routine
+        })
+
+    return render(request, 'routine_planner/workout_form.html')
+
+
+def save_routine(request):
+    if request.method == 'POST':
         # Collect routine name and created_by from user input
         routine_name = request.POST.get('routine_name')
         created_by = request.POST.get('created_by')
+        details = request.POST.get('generated_routine')  # The AI-generated routine
 
         # Save the generated routine to the database
         routine = Routine(
             name=routine_name,
             created_by=created_by,
-            details=generated_routine
+            details=details
         )
         routine.save()
 
-        return render(request, 'routine_planner/workout_result.html', {'generated_routine': generated_routine})
+        return redirect('success_url')  # Replace with your success URL or template
 
-    return render(request, 'routine_planner/workout_form.html')
+    return redirect('workout_form')  # Or wherever you want to redirect if the method is not POST
+def success_view(request):
+    routines = Routine.objects.all()  # Retrieve all routines from the database
+    return render(request, 'routine_planner/success.html', {'routines': routines})

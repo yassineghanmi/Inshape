@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success</title>
+</head>
+<body>
+    <h1>Routine Saved Successfully!</h1>
+    <p>Your workout routine has been saved.</p>
+    <a href="{% url 'workout_view' %}">Create Another Routine</a>
+
+    <h2>Saved Routines</h2>
+    <ul>
+        {% for routine in routines %}
+            <li>
+                <strong>Routine Name:</strong> {{ routine.name }}<br>
+                <strong>Created By:</strong> {{ routine.created_by }}<br>
+                <strong>Details:</strong> {{ routine.details }}<br>
+            </li>
+        {% empty %}
+            <li>No routines found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,13 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generated Workout Routine</title>
-</head>
-<body>
-    <h1>Your Generated Workout Routine</h1>
-    <pre>{{ generated_routine }}</pre>  <!-- Display the AI-generated routine -->
-    <a href="{% url 'workout_view' %}">Generate another routine</a>  <!-- Link back to the form -->
-</body>
-</html>
+<h2>Generated Workout Routine</h2>
+<p>{{ generated_routine }}</p>
+
+<form method="POST" action="{% url 'save_routine' %}">
+    {% csrf_token %}
+    
+    <label for="routine_name">Routine Name:</label>
+    <input type="text" id="routine_name" name="routine_name" required><br>
+
+    <label for="created_by">Created By:</label>
+    <input type="text" id="created_by" name="created_by" required><br>
+
+    <!-- Hidden field to pass the generated routine -->
+    <input type="hidden" name="generated_routine" value="{{ generated_routine }}">
+
+    <input type="submit" value="Save Routine">
+</form>
