@@ -1,0 +1,31 @@
+<form method="POST" action="{% url 'workout_view' %}">
+    {% csrf_token %}
+    <label for="goal">Goal:</label>
+    <input type="text" id="goal" name="goal" required><br>
+
+    <label for="experience_level">Experience Level:</label>
+    <input type="text" id="experience_level" name="experience_level" required><br>
+
+    <label for="duration">Duration:</label>
+    <input type="number" id="duration" name="duration" required><br>
+
+    <label for="workout_type">Workout Type:</label>
+    <input type="text" id="workout_type" name="workout_type" required><br>
+
+    <label for="target_muscle_groups">Target Muscle Groups:</label>
+    <input type="text" id="target_muscle_groups" name="target_muscle_groups" required placeholder="e.g., Chest Back Legs Arms"><br>
+
+    <label for="equipment_needed">Equipment Needed:</label>
+    <input type="text" id="equipment_needed" name="equipment_needed" required placeholder="e.g., Dumbbells Barbell Bench Kettlebell"><br>
+
+    <label for="sessions_per_week">Sessions Per Week:</label>
+    <input type="number" id="sessions_per_week" name="sessions_per_week" required><br>
+
+    <label for="routine_name">Routine Name:</label>
+    <input type="text" id="routine_name" name="routine_name" required><br>
+
+    <label for="created_by">Created By:</label>
+    <input type="text" id="created_by" name="created_by" required><br>
+
+    <input type="submit" value="Submit">
+</form>

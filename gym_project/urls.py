@@ -45,8 +45,10 @@ urlpatterns = [
         name='password_reset'
     ),
     path('accounts/', include('django.contrib.auth.urls')),
+    
     path('accounts/register/', registration_view, name='register'),
     path("accounts/profile/", profile, name="profile"),
-
+    path('routine/', include('routineplanner.urls')),
+    
 
 ]

@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generated Workout Routine</title>
+</head>
+<body>
+    <h1>Your Generated Workout Routine</h1>
+    <pre>{{ generated_routine }}</pre>  <!-- Display the AI-generated routine -->
+    <a href="{% url 'workout_view' %}">Generate another routine</a>  <!-- Link back to the form -->
+</body>
+</html>
