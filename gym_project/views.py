@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django import forms
+from django.http import HttpResponse
 
+from chatterbot import ChatBot
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
@@ -62,3 +64,8 @@ def contact(request):
 
 def profile(request):
     return render(request, 'profile.html')
+
+def getResponse(request):
+    userMessage = request.GET.get('userMessage')  # Corrected request.GET
+    # For now, just echo back the user's message as a simple response
+    return HttpResponse(userMessage)
