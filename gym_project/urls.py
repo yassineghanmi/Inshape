@@ -49,6 +49,6 @@ urlpatterns = [
     path("accounts/profile/", profile, name="profile"),
 
    path('getResponse', views.getResponse, name='getResponse'),
-    
+   
     
 ]
