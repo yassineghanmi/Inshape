@@ -1,0 +1,39 @@
+<h1>Nutrition List</h1>
+
+<!-- Dropdown Button -->
+<div class="dropdown">
+    <button class="btn btn-secondary dropdown-toggle" type="button" id="addDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+        Add
+    </button>
+    <ul class="dropdown-menu" aria-labelledby="addDropdown">
+        <!-- Search bar -->
+        <li>
+            <form class="dropdown-item">
+                <input type="text" placeholder="Search..." aria-label="Search" class="form-control">
+            </form>
+        </li>
+        <!-- Add Manual option -->
+        <li><a class="dropdown-item" href="{% url 'nutrition_create' %}">Add Manual</a></li>
+        <!-- Add by Barcode option -->
+        <li><a class="dropdown-item" href="{% url 'add_by_barcode' %}">Add by Barcode</a></li>
+    </ul>
+</div>
+
+<!-- Date Selector -->
+<form method="get">
+    <label for="date">Select Date:</label>
+    <input type="date" id="date" name="date" value="{{ selected_date }}" class="form-control" onchange="this.form.submit()">
+</form>
+
+<!-- Nutrition items list -->
+<ul>
+    {% for item in items %}
+        <li>
+            {{ item.name }} ({{ item.created_at.date }}) - 
+            <a href="{% url 'nutrition_update' item.pk %}">Edit</a> | 
+            <a href="{% url 'nutrition_delete' item.pk %}">Delete</a>
+        </li>
+    {% empty %}
+        <li>No items found for this date.</li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,37 @@
+<!-- nutrition/templates/nutrition/add_by_barcode.html -->
+<h1>Add Product by Barcode</h1>
+
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Upload</button>
+</form>
+
+{% if product_info %}
+    {% if product_info.error %}
+        <p>{{ product_info.error }}</p>
+    {% else %}
+        <h3>Product Information</h3>
+        <p><strong>Code:</strong> {{ product_info.code }}</p>
+        <p><strong>Product Name:</strong> {{ product_info.product_name }}</p>
+        <p><strong>Energy:</strong> {{ product_info.nutriments.energy }}</p>
+        <p><strong>Carbohydrates:</strong> {{ product_info.nutriments.carbohydrates }}</p>
+        <p><strong>Fat:</strong> {{ product_info.nutriments.fat }}</p>
+        <p><strong>Proteins:</strong> {{ product_info.nutriments.proteins }}</p>
+        <p><strong>sugars:</strong> {{ product_info.nutriments.sugars }}</p>
+        <img src="{{ product_info.selected_images.front.display.fr }}">
+
+        <!-- Add button to save the product -->
+        <form method="post" action="{% url 'add_nutrition' %}">
+            {% csrf_token %}
+            <input type="hidden" name="name" value="{{ product_info.product_name }}">
+            <input type="hidden" name="calories" value="{{ product_info.nutriments.energy }}">
+            <input type="hidden" name="protein" value="{{ product_info.nutriments.proteins }}">
+            <input type="hidden" name="carbohydrates" value="{{ product_info.nutriments.carbohydrates }}">
+            <input type="hidden" name="fats" value="{{ product_info.nutriments.fat }}">
+            <input type="hidden" name="sugars" value="{{ product_info.nutriments.sugars }}">
+            <button type="submit">Add</button>
+        </form>
+
+    {% endif %}
+{% endif %}
