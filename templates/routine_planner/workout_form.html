@@ -1,26 +1,251 @@
-<form method="POST" action="{% url 'workout_view' %}">
-    {% csrf_token %}
-    <label for="goal">Goal:</label>
-    <input type="text" id="goal" name="goal" required><br>
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}Workout Planner | Gym{% endblock %}
 
-    <label for="experience_level">Experience Level:</label>
-    <input type="text" id="experience_level" name="experience_level" required><br>
+{% block content %}
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Workout Planner</h2>
+                        <div class="bt-option">
+                            <a href="./index.html">Home</a>
+                            <a href="#">Pages</a>
+                            <span>Workout Planner</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
 
-    <label for="duration">Duration:</label>
-    <input type="number" id="duration" name="duration" required><br>
+    <!-- Workout Planner Section Begin -->
+    <section class="bmi-calculator-section spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="section-title chart-title">
+                        <span>Plan Your Routine</span>
+                        <h2>WORKOUT PLANNER FORM</h2>
+                    </div>
+                    <div class="chart-calculate-form">
+                        <p>Fill out the form below to generate your personalized workout routine.</p>
+                        <form method="POST" action="{% url 'workout_view' %}">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <label for="goal" style="color: white;">Goal:</label>
+                                    <select id="goal" name="goal" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                        <option value="" disabled selected>Select your goal</option>
+                                        <option value="weight_loss">Weight Loss</option>
+                                        <option value="muscle_gain">Muscle Gain</option>
+                                        <option value="endurance">Endurance</option>
+                                        <option value="overall_fitness">Overall Fitness</option>
+                                        <option value="rehabilitation">Rehabilitation</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <label for="experience_level" style="color: white;">Experience Level:</label>
+                                    <select id="experience_level" name="experience_level" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                        <option value="" disabled selected>Select your experience level</option>
+                                        <option value="beginner">Beginner</option>
+                                        <option value="intermediate">Intermediate</option>
+                                        <option value="advanced">Advanced</option>
+                                        <option value="expert">Expert</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <label for="duration" style="color: white;">Duration (in minutes):</label>
+                                    <input type="number" id="duration" name="duration" required>
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="workout_type" style="color: white;">Workout Type:</label>
+                                    <select id="workout_type" name="workout_type" required style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                                        <option value="" disabled selected>Select your workout type</option>
+                                        <option value="strength_training">Strength Training</option>
+                                        <option value="cardio">Cardio</option>
+                                        <option value="flexibility">Flexibility</option>
+                                        <option value="high_intensity_interval_training">High Intensity Interval Training (HIIT)</option>
+                                        <option value="yoga">Yoga</option>
+                                        <option value="pilates">Pilates</option>
+                                        <option value="crossfit">CrossFit</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="col-sm-6">
+                                    <label for="target_muscle_groups" style="color: white;">Target Muscle Groups:</label>
+                                    <div class="dropdown" style="position: relative;">
+                                        <button id="dropdownMenuButton" class="btn btn-secondary" style="background-color: #444; color: white; padding: 10px; border: none; cursor: pointer; width: 100%;">
+                                            Select Muscle Groups
+                                        </button>
+                                        <div class="dropdown-content" style="display: none; position: absolute; background-color: #555; color: white; min-width: 150px; max-height: 200px; overflow-y: auto; z-index: 1; padding: 10px; border-radius: 5px;">
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="target_muscle_groups" value="chest" style="margin-right: 8px; width: 16px; height: 16px;"> Chest
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="target_muscle_groups" value="back" style="margin-right: 8px; width: 16px; height: 16px;"> Back
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="target_muscle_groups" value="legs" style="margin-right: 8px; width: 16px; height: 16px;"> Legs
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="target_muscle_groups" value="arms" style="margin-right: 8px; width: 16px; height: 16px;"> Arms
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="target_muscle_groups" value="shoulders" style="margin-right: 8px; width: 16px; height: 16px;"> Shoulders
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="target_muscle_groups" value="core" style="margin-right: 8px; width: 16px; height: 16px;"> Core
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Add this script to toggle the dropdown -->
+                                <script>
+                                    document.getElementById("dropdownMenuButton").onclick = function(event) {
+                                        // Prevent the dropdown from closing when clicking inside
+                                        event.stopPropagation();
+                                        
+                                        var dropdownContent = document.querySelector(".dropdown-content");
+                                        dropdownContent.style.display = dropdownContent.style.display === "none" || dropdownContent.style.display === "" ? "block" : "none";
+                                    };
+                                
+                                    // Prevent the dropdown from closing when clicking checkboxes
+                                    document.querySelectorAll('.dropdown-content input[type="checkbox"]').forEach(function(checkbox) {
+                                        checkbox.onclick = function(event) {
+                                            event.stopPropagation(); // Prevent click event from bubbling up
+                                        };
+                                    });
+                                
+                                    // Close the dropdown if the user clicks outside of it
+                                    window.onclick = function(event) {
+                                        if (!event.target.matches('#dropdownMenuButton')) {
+                                            var dropdowns = document.getElementsByClassName("dropdown-content");
+                                            for (var i = 0; i < dropdowns.length; i++) {
+                                                dropdowns[i].style.display = "none";
+                                            }
+                                        }
+                                    };
+                                </script>
+                                
+                                
+                                <div class="col-sm-6">
+                                    <label for="equipment_needed" style="color: white;">Equipment available:</label>
+                                    <div class="dropdown" style="position: relative;">
+                                        <button id="equipmentDropdownButton" class="btn btn-secondary" style="background-color: #444; color: white; padding: 10px; border: none; cursor: pointer; width: 100%;">
+                                            Select Equipment
+                                        </button>
+                                        <div class="equipment-dropdown-content" style="display: none; position: absolute; background-color: #555; color: white; min-width: 150px; max-height: 200px; overflow-y: auto; z-index: 1; padding: 10px; border-radius: 5px;">
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="equipment_needed" value="dumbbells" style="margin-right: 8px; width: 16px; height: 16px;"> Dumbbells
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="equipment_needed" value="barbell" style="margin-right: 8px; width: 16px; height: 16px;"> Barbell
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="equipment_needed" value="kettlebell" style="margin-right: 8px; width: 16px; height: 16px;"> Kettlebell
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="equipment_needed" value="resistance_bands" style="margin-right: 8px; width: 16px; height: 16px;"> Resistance Bands
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="equipment_needed" value="medicine_ball" style="margin-right: 8px; width: 16px; height: 16px;"> Medicine Ball
+                                            </label>
+                                            <label style="display: flex; align-items: center; font-size: 14px;">
+                                                <input type="checkbox" name="equipment_needed" value="pull_up_bar" style="margin-right: 8px; width: 16px; height: 16px;"> Pull-Up Bar
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Add this script to toggle the dropdown -->
+                                <script>
+                                    document.getElementById("equipmentDropdownButton").onclick = function(event) {
+                                        // Prevent the dropdown from closing when clicking inside
+                                        event.stopPropagation();
+                                        
+                                        var dropdownContent = document.querySelector(".equipment-dropdown-content");
+                                        dropdownContent.style.display = dropdownContent.style.display === "none" || dropdownContent.style.display === "" ? "block" : "none";
+                                    };
+                                
+                                    // Prevent the dropdown from closing when clicking checkboxes
+                                    document.querySelectorAll('.equipment-dropdown-content input[type="checkbox"]').forEach(function(checkbox) {
+                                        checkbox.onclick = function(event) {
+                                            event.stopPropagation(); // Prevent click event from bubbling up
+                                        };
+                                    });
+                                
+                                    // Close the dropdown if the user clicks outside of it
+                                    window.onclick = function(event) {
+                                        if (!event.target.matches('#equipmentDropdownButton')) {
+                                            var dropdowns = document.getElementsByClassName("equipment-dropdown-content");
+                                            for (var i = 0; i < dropdowns.length; i++) {
+                                                dropdowns[i].style.display = "none";
+                                            }
+                                        }
+                                    };
+                                </script>
+                                
+                                <div class="col-sm-6">
+                                    <label for="sessions_per_week" style="color: white;">Sessions Per Week:</label>
+                                    <input type="number" id="sessions_per_week" name="sessions_per_week" required>
+                                </div>
+                                <div class="col-lg-12">
+                                    <input type="submit" value="Generate">
+                                </div>
+                                <div id="loading" style="display: none; text-align: center;">
+                                    <img src="{% static 'img/loading.gif' %}" alt="Loading..." />
+                                    <p>Generating your routine, please wait...</p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+    <!-- Workout Planner Section End -->
 
-    <label for="workout_type">Workout Type:</label>
-    <input type="text" id="workout_type" name="workout_type" required><br>
-
-    <label for="target_muscle_groups">Target Muscle Groups:</label>
-    <input type="text" id="target_muscle_groups" name="target_muscle_groups" required placeholder="e.g., Chest Back Legs Arms"><br>
-
-    <label for="equipment_needed">Equipment Needed:</label>
-    <input type="text" id="equipment_needed" name="equipment_needed" required placeholder="e.g., Dumbbells Barbell Bench Kettlebell"><br>
-
-    <label for="sessions_per_week">Sessions Per Week:</label>
-    <input type="number" id="sessions_per_week" name="sessions_per_week" required><br>
-
-    
-    <input type="submit" value="Submit">
-</form>
+    <!-- Get In Touch Section Begin -->
+    <div class="gettouch-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-map-marker"></i>
+                        <p>333 Middle Winchendon Rd, Rindge,<br/> NH 03461</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-mobile"></i>
+                        <ul>
+                            <li>125-711-811</li>
+                            <li>125-668-886</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text email">
+                        <i class="fa fa-envelope"></i>
+                        <p>Support.gymcenter@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        document.getElementById("workoutForm").onsubmit = function() {
+            // Show the loading animation
+            document.getElementById("loading").style.display = "block";
+        };
+    </script>
+    <!-- Get In Touch Section End -->
+{% endblock %}

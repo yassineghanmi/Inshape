@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
+from django.views import View
 from .forms import RoutineForm  # Updated import for the new RoutineForm
 from .models import Routine  # Import your Routine model
 import google.generativeai as genai
@@ -6,6 +7,7 @@ import json  # Make sure to import the json module
 
 # Configure your AI model
 genai.configure(api_key="AIzaSyDd9RRJuKh0b4RDo45KMV3mPuqkVf8upe0")  # Replace with your actual API key
+
 generation_config = {
     "temperature": 1,
     "top_p": 0.95,
@@ -14,7 +16,18 @@ generation_config = {
     "response_mime_type": "application/json",
 }
 model = genai.GenerativeModel(model_name="gemini-1.5-pro", generation_config=generation_config)
+def delete_routine(request, id):
+    routine = get_object_or_404(Routine, id=id)
+    routine.delete()
+    return redirect('success_url')
+class RoutineDetailView(View):
+    def get(self, request, id):
+        routine = get_object_or_404(Routine, id=id)
 
+        # Deserialize the JSON string in routine.details
+        routine.details = json.loads(routine.details)  # Ensure 'details' is a JSON string in the database
+        
+        return render(request, 'routine_planner/routine_detail.html', {'routine': routine})
 def workout_view(request):
     if request.method == 'POST':
         # Collect input data from the form
