@@ -56,63 +56,135 @@ def workout_view(request):
     "Do not alter any fields or structure; fill in the fields with specific details as applicable to the user’s input. "
     "Use the same field names, order, and structure as in the template provided below:\n"
     "{\n"
-    "  \"routine\": {\n"
-    "    \"Monday\": {\n"
-    "      \"name\": \"\",\n"
-    "      \"duration\": 0,\n"
-    "      \"exercises\": [\n"
-    "        {\n"
-    "          \"name\": \"\",\n"
-    "          \"sets\": 0,\n"
-    "          \"reps\": \"\",\n"
-    "          \"rest\": 0,\n"
-    "          \"equipment\": \"\"\n"
-    "        }\n"
-    "      ],\n"
-    "      \"cardio\": {\n"
-    "        \"type\": \"\",\n"
-    "        \"duration\": 0,\n"
-    "        \"intensity\": \"\"\n"
-    "      }\n"
-    "    },\n"
-    "    \"Wednesday\": {\n"
-    "      \"name\": \"\",\n"
-    "      \"duration\": 0,\n"
-    "      \"exercises\": [\n"
-    "        {\n"
-    "          \"name\": \"\",\n"
-    "          \"sets\": 0,\n"
-    "          \"reps\": \"\",\n"
-    "          \"rest\": 0,\n"
-    "          \"equipment\": \"\"\n"
-    "        }\n"
-    "      ],\n"
-    "      \"cardio\": {\n"
-    "        \"type\": \"\",\n"
-    "        \"duration\": 0,\n"
-    "        \"intensity\": \"\"\n"
-    "      }\n"
-    "    },\n"
-    "    \"Friday\": {\n"
-    "      \"name\": \"\",\n"
-    "      \"duration\": 0,\n"
-    "      \"exercises\": [\n"
-    "        {\n"
-    "          \"name\": \"\",\n"
-    "          \"sets\": 0,\n"
-    "          \"reps\": \"\",\n"
-    "          \"rest\": 0,\n"
-    "          \"equipment\": \"\"\n"
-    "        }\n"
-    "      ],\n"
-    "      \"cardio\": {\n"
-    "        \"type\": \"\",\n"
-    "        \"duration\": 0,\n"
-    "        \"intensity\": \"\"\n"
-    "      }\n"
-    "    }\n"
-    "  },\n"
-    "  \"notes\": \"\"\n"
+    "  \"routine\": {\n" \
+    "    \"Monday\": {\n" \
+    "      \"name\": \"\",\n" \
+    "      \"duration\": 0,\n" \
+    "      \"exercises\": [\n" \
+    "        {\n" \
+    "          \"name\": \"\",\n" \
+    "          \"sets\": 0,\n" \
+    "          \"reps\": \"\",\n" \
+    "          \"rest\": 0,\n" \
+    "          \"equipment\": \"\"\n" \
+    "        }\n" \
+    "      ],\n" \
+    "      \"cardio\": {\n" \
+    "        \"type\": \"\",\n" \
+    "        \"duration\": 0,\n" \
+    "        \"intensity\": \"\"\n" \
+    "      }\n" \
+    "    },\n" \
+    "    \"Tuesday\": {\n" \
+    "      \"name\": \"\",\n" \
+    "      \"duration\": 0,\n" \
+    "      \"exercises\": [\n" \
+    "        {\n" \
+    "          \"name\": \"\",\n" \
+    "          \"sets\": 0,\n" \
+    "          \"reps\": \"\",\n" \
+    "          \"rest\": 0,\n" \
+    "          \"equipment\": \"\"\n" \
+    "        }\n" \
+    "      ],\n" \
+    "      \"cardio\": {\n" \
+    "        \"type\": \"\",\n" \
+    "        \"duration\": 0,\n" \
+    "        \"intensity\": \"\"\n" \
+    "      }\n" \
+    "    },\n" \
+    "    \"Wednesday\": {\n" \
+    "      \"name\": \"\",\n" \
+    "      \"duration\": 0,\n" \
+    "      \"exercises\": [\n" \
+    "        {\n" \
+    "          \"name\": \"\",\n" \
+    "          \"sets\": 0,\n" \
+    "          \"reps\": \"\",\n" \
+    "          \"rest\": 0,\n" \
+    "          \"equipment\": \"\"\n" \
+    "        }\n" \
+    "      ],\n" \
+    "      \"cardio\": {\n" \
+    "        \"type\": \"\",\n" \
+    "        \"duration\": 0,\n" \
+    "        \"intensity\": \"\"\n" \
+    "      }\n" \
+    "    },\n" \
+    "    \"Thursday\": {\n" \
+    "      \"name\": \"\",\n" \
+    "      \"duration\": 0,\n" \
+    "      \"exercises\": [\n" \
+    "        {\n" \
+    "          \"name\": \"\",\n" \
+    "          \"sets\": 0,\n" \
+    "          \"reps\": \"\",\n" \
+    "          \"rest\": 0,\n" \
+    "          \"equipment\": \"\"\n" \
+    "        }\n" \
+    "      ],\n" \
+    "      \"cardio\": {\n" \
+    "        \"type\": \"\",\n" \
+    "        \"duration\": 0,\n" \
+    "        \"intensity\": \"\"\n" \
+    "      }\n" \
+    "    },\n" \
+    "    \"Friday\": {\n" \
+    "      \"name\": \"\",\n" \
+    "      \"duration\": 0,\n" \
+    "      \"exercises\": [\n" \
+    "        {\n" \
+    "          \"name\": \"\",\n" \
+    "          \"sets\": 0,\n" \
+    "          \"reps\": \"\",\n" \
+    "          \"rest\": 0,\n" \
+    "          \"equipment\": \"\"\n" \
+    "        }\n" \
+    "      ],\n" \
+    "      \"cardio\": {\n" \
+    "        \"type\": \"\",\n" \
+    "        \"duration\": 0,\n" \
+    "        \"intensity\": \"\"\n" \
+    "      }\n" \
+    "    },\n" \
+    "    \"Saturday\": {\n" \
+    "      \"name\": \"\",\n" \
+    "      \"duration\": 0,\n" \
+    "      \"exercises\": [\n" \
+    "        {\n" \
+    "          \"name\": \"\",\n" \
+    "          \"sets\": 0,\n" \
+    "          \"reps\": \"\",\n" \
+    "          \"rest\": 0,\n" \
+    "          \"equipment\": \"\"\n" \
+    "        }\n" \
+    "      ],\n" \
+    "      \"cardio\": {\n" \
+    "        \"type\": \"\",\n" \
+    "        \"duration\": 0,\n" \
+    "        \"intensity\": \"\"\n" \
+    "      }\n" \
+    "    },\n" \
+    "    \"Sunday\": {\n" \
+    "      \"name\": \"\",\n" \
+    "      \"duration\": 0,\n" \
+    "      \"exercises\": [\n" \
+    "        {\n" \
+    "          \"name\": \"\",\n" \
+    "          \"sets\": 0,\n" \
+    "          \"reps\": \"\",\n" \
+    "          \"rest\": 0,\n" \
+    "          \"equipment\": \"\"\n" \
+    "        }\n" \
+    "      ],\n" \
+    "      \"cardio\": {\n" \
+    "        \"type\": \"\",\n" \
+    "        \"duration\": 0,\n" \
+    "        \"intensity\": \"\"\n" \
+    "      }\n" \
+    "    }\n" \
+    "  },\n" \
+    "  \"notes\": \"\"\n" \
     "}"
 )
 
@@ -124,10 +196,11 @@ def workout_view(request):
 
         # Get the AI's response
         generated_routine = response.text  # The generated routine details
-        
+        generated_routinejson = json.loads(generated_routine)
         # Redirect to the preview page with the generated routine
         return render(request, 'routine_planner/workout_result.html', {
-            'generated_routine': generated_routine
+            'generated_routine': generated_routine,
+            "json_routine": generated_routinejson,
         })
 
     return render(request, 'routine_planner/workout_form.html')
@@ -135,22 +208,30 @@ def workout_view(request):
 
 def save_routine(request):
     if request.method == 'POST':
-        # Collect routine name and created_by from user input
         routine_name = request.POST.get('routine_name')
         created_by = request.POST.get('created_by')
-        details = request.POST.get('generated_routine')  # The AI-generated routine
+        details = request.POST.get('generated_routine')
+        
+        if not details:
+            print("Details are empty!")
+        
+        # Debugging: Print out the values
+        print(f"Routine Name: {routine_name}, Created By: {created_by}, Details: {details}")
 
-        # Save the generated routine to the database
+        # Deserialize the details from JSON string to dict
+        details_dict = json.loads(details)
+
         routine = Routine(
             name=routine_name,
             created_by=created_by,
-            details=details
+            details=json.dumps(details_dict)  # Save as JSON string in the database
         )
         routine.save()
 
-        return redirect('success_url')  # Replace with your success URL or template
+        return redirect('success_url')
 
-    return redirect('workout_form')  # Or wherever you want to redirect if the method is not POST
+    return redirect('workout_form')
+
 def success_view(request):
     routines = Routine.objects.all()  # Retrieve all routines from the database
     

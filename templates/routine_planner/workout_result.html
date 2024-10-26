@@ -21,7 +21,96 @@
         </div>
     </section>
     <!-- Breadcrumb Section End -->
-
+    <style>
+        body {
+            background-color: #151515; /* Set background color */
+            color: #ffffff; /* Default text color for better visibility */
+        }
+    
+        .breadcrumb-section {
+            background-color: rgba(0, 0, 0, 0.7); /* Darkened breadcrumb section */
+        }
+        .btn.back-to-routines {
+            background-color: red; /* Base background color */
+            color: white; /* Text color */
+            padding: 10px 20px; /* Padding for the button */
+            border: none; /* Remove border */
+            border-radius: 5px; /* Rounded corners */
+            text-decoration: none; /* Remove underline */
+            font-size: 16px; /* Font size */
+            transition: background-color 0.3s, transform 0.3s; /* Transition for hover effects */
+            display: inline-block; /* Inline-block for spacing */
+            margin-top: 20px; /* Space above the button */
+        }
+        
+        .btn.back-to-routines:hover {
+            background-color: darkred; /* Darker shade on hover */
+            transform: translateY(-2px); /* Slight lift effect on hover */
+        }
+        
+        .delete-button {
+            background-color: transparent; /* Transparent background */
+            border: none; /* No border */
+            color: #ff4444; /* Bright red text color */
+            font-size: 24px; /* Adjust size as needed */
+            cursor: pointer; /* Pointer cursor on hover */
+            position: absolute; /* Position the button */
+            top: 10px; /* Adjust top position */
+            right: 10px; /* Adjust right position */
+            transition: color 0.3s; /* Transition for hover effect */
+        }
+        .back-link {
+            display: flex; /* Use flexbox layout */
+            justify-content: flex-end; /* Align children to the right */
+            margin-top: 20px; /* Spacing above the back link */
+        }
+        
+    
+        .delete-button:hover {
+            color: #ff0000; /* Brighter red on hover */
+        }
+    
+        .back-link {
+            margin-top: 20px; /* Spacing above the back link */
+        }
+    
+        .details-list, .exercise-list { /* Target both lists */
+            list-style-type: none; /* Remove bullets */
+            padding: 0; /* Remove padding */
+            margin: 0; /* Remove margin */
+        }
+    
+        .day-detail {
+            margin-bottom: 30px; /* Increased spacing between day details */
+            border: 1px solid #444; /* Border color */
+            padding: 15px; /* Increased padding for day details */
+            border-radius: 8px; /* Rounded corners */
+            background-color: #1e1e1e; /* Slightly lighter background for day details */
+        }
+    
+        .routine-details h3, .routine-details h4 {
+            color: #f1f1f1; /* Lighter color for headings */
+            margin-bottom: 15px; /* Spacing below headings */
+        }
+    
+        .routine-details p {
+            color: #d1d1d1; /* Lighter color for paragraphs */
+            margin-bottom: 10px; /* Spacing below paragraphs */
+        }
+    
+        .exercise-list li {
+            margin-bottom: 8px; /* Spacing between exercises */
+        }
+    
+        .exercise-list strong {
+            color: #ffd700; /* Golden color for exercise names */
+        }
+    
+        .exercise-list i {
+            margin-right: 5px; /* Spacing between icon and text */
+            color: #ffd700; /* Color for the icons */
+        }
+    </style>
     <!-- Workout Routine Section Begin -->
     <section class="bmi-calculator-section spad">
         <div class="container">
@@ -32,8 +121,30 @@
                         <h2>Your Workout Routine</h2>
                     </div>
                     {% if generated_routine %}
-                        <p>{{ generated_routine }}</p>
-                        
+                        {% comment %} <p>{{ json_routine }}</p> {% endcomment %}
+                        <ul class="details-list">
+                            {% for day, details in json_routine.routine.items %}
+                                <li class="day-detail">
+                                    <h2 style="color:white;"><i class="fa fa-calendar-day"></i> {{ day }}:</h2>
+                                    <p><strong>Workout Type:</strong> {{ details.name }}</p>
+                                    <p><strong>Duration:</strong> {{ details.duration }} minutes</p>
+                                    <strong>Exercises:</strong>
+                                    <ul class="exercise-list"> 
+                                        {% for exercise in details.exercises %}
+                                            <li>
+                                                <strong><i class="fa fa-dumbbell"></i> {{ exercise.name }}</strong><br>
+                                                <i class="fa fa-recycle"></i> {{ exercise.sets }} Sets, 
+                                                <i class="fa fa-flag-checkered"></i> {{ exercise.reps }} Reps, 
+                                                <i class="fa fa-clock"></i> Rest: {{ exercise.rest }} seconds, 
+                                                Equipment: {{ exercise.equipment }}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                    <p><strong>Cardio:</strong> {{ details.cardio.type }}, Duration: {{ details.cardio.duration }} minutes, Intensity: {{ details.cardio.intensity }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        <p><strong><i class="fa fa-sticky-note"></i> Notes:</strong> {{ routine.details.notes }}</p>
                         <form method="POST" action="{% url 'save_routine' %}">
                             {% csrf_token %}
                             
@@ -60,7 +171,7 @@
                             margin-bottom: 20px;" id="created_by" name="created_by" required><br>
 
                             <!-- Hidden field to pass the generated routine -->
-                            <input type="hidden" name="generated_routine" value="{{ generated_routine|safe }}">
+                            <input type="hidden" name="generated_routine" value="{{ generated_routine }}">
 
                             <input style="font-size: 14px; 
                             color: #ffffff; 
