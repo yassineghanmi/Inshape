@@ -48,5 +48,7 @@ urlpatterns = [
     path('accounts/register/', registration_view, name='register'),
     path("accounts/profile/", profile, name="profile"),
 
-
+   path('getResponse', views.getResponse, name='getResponse'),
+   
+    
 ]
