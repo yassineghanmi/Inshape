@@ -243,3 +243,15 @@ def success_view(request):
             routine.details = {}  # If parsing fails, set to empty dict or handle accordingly
 
     return render(request, 'routine_planner/success.html', {'routines': routines})
+def edit_routine(request, routine_id):
+    routine = get_object_or_404(Routine, id=routine_id)
+    
+    if request.method == 'POST':
+        form = RoutineForm(request.POST, instance=routine)
+        if form.is_valid():
+            form.save()
+            return redirect('routine_detail', id=routine.id)  # Use 'id' here
+    else:
+        form = RoutineForm(instance=routine)
+    
+    return render(request, 'routine_planner/edit_routine.html', {'form': form, 'routine': routine})

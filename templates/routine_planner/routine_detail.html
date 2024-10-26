@@ -22,6 +22,8 @@
     <div class="container">
         <div class="back-link" >
             <a href="{% url 'success_url' %}" class="btn back-to-routines">Back to Routines</a>
+            <div style=""></div>
+            <a href="{% url 'edit_routine' routine.id %}" style="margin-left:10px;" class="btn back-to-routines">Edit Routine</a>
         </div>
         
         <div class="routine-details">
@@ -123,6 +125,7 @@
         display: flex; /* Use flexbox layout */
         justify-content: flex-end; /* Align children to the right */
         margin-top: 20px; /* Spacing above the back link */
+        margin-left:20px;
     }
     
 
