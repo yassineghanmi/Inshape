@@ -32,5 +32,5 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('about-us/', views.about_us, name='about_us'),
     path('admin/', admin.site.urls),
-    path('api/exercises/', include('workouts.urls')),
+    path('exercises/', include('workouts.urls')),
 ]

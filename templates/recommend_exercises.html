@@ -1,0 +1,38 @@
+<!-- workouts/templates/workouts/recommend_exercises.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommended Exercises</title>
+</head>
+<body>
+    <h1>Recommended Exercises for {{ user }} ({{ muscle_group }})</h1>
+
+    <form method="post" action="{% url 'save_exercise_recommendation' %}">
+        {% csrf_token %}
+        <input type="hidden" name="user" value="{{ user }}">
+        <input type="hidden" name="muscle_group" value="{{ muscle_group }}">
+
+        <ul>
+            {% for exercise in recommended_exercises %}
+                <li>
+                    <strong>{{ exercise.0 }}</strong> - {{ exercise.1 }} (Body Part: {{ exercise.2 }})
+                    <p>{{ exercise.3 }}</p>
+
+                    <!-- Hidden fields to pass exercise data -->
+                    <input type="hidden" name="exercises[]" value="{{ exercise.0 }}">
+                    <input type="hidden" name="body_part_{{ exercise.0 }}" value="{{ exercise.2 }}">
+                    <input type="hidden" name="equipment_{{ exercise.0 }}" value="{{ exercise.1 }}">
+                    <input type="hidden" name="description_{{ exercise.0 }}" value="{{ exercise.3 }}">
+                </li>
+            {% endfor %}
+        </ul>
+
+        <button type="submit">Save Recommendations</button>
+    </form>
+
+    <a href="{% url 'generate_exercise' %}">Regenerate</a>
+</body>
+</html>

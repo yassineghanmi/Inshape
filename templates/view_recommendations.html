@@ -1,0 +1,27 @@
+<!-- workouts/templates/workouts/view_recommendations.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saved Recommendations for {{ user }}</title>
+</head>
+<body>
+    <h1>Saved Recommendations for {{ user }}</h1>
+
+    {% for recommendation in recommendations %}
+        <h2>{{ recommendation.muscle_group }} Exercises</h2>
+        <ul>
+            {% for exercise in recommendation.exercises.all %}
+                <li>
+                    <strong>{{ exercise.title }}</strong> - {{ exercise.equipment }} (Body Part: {{ exercise.body_part }})
+                    <p>{{ exercise.description }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% endfor %}
+
+    <a href="{% url 'generate_exercise' %}">Generate New Recommendations</a>
+</body>
+</html>
