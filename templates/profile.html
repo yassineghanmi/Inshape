@@ -5,7 +5,7 @@
 
 {% block content %}
 
-<section class="hero-section d-flex justify-content-center align-items-center" style="background-color: #111; height: 150vh;">
+<section class="hero-section d-flex justify-content-center align-items-center" style="background-color: #111; height: {% if user.is_authenticated %}150vh{% else %}100vh{% endif %};">
     <div class="container" style="width: 80%;">
         <div class="row justify-content-center">
             <div class="col-12">
@@ -93,22 +93,38 @@
                         </div>
                     </section>
                     
-                    
-
                     {% else %}
-                        <form>
-                            <p class="text-white">Welcome, new user. Please log in.</p>
-                            <p>
-                                <a href="{% url 'login' %}" class="text-primary">Login</a> or 
-                                <a href="{% url 'register' %}" class="text-primary">Register</a>
-                            </p>
-                        </form>
+                    <form class="text-center my-4" style="margin-top: 20px;">
+                        <p class="text-white mb-3" style="font-size: 1.2rem; margin-bottom: 16px;">
+                            Welcome, new user. Please log in.
+                        </p>
+                        <p style="margin-bottom: 24px; font-size: 1rem;">
+                            <a href="{% url 'login' %}" class="text-primary" style="font-weight: bold; text-decoration: none; transition: color 0.3s;">
+                                Login
+                            </a> or 
+                            <a href="{% url 'register' %}" class="text-primary" style="font-weight: bold; text-decoration: none; transition: color 0.3s;">
+                                Register
+                            </a>
+                        </p>
+                        <div style="margin-top: 20px;">
+                            <button type="button" onclick="window.location.href='{% url 'login' %}'" class="btn btn-primary" 
+                                    style="border-radius: 25px; padding: 0.5rem 2rem; font-size: 1rem; margin-right: 10px;">
+                                Go to Login
+                            </button>
+                            <button type="button" onclick="window.location.href='{% url 'register' %}'" class="btn btn-secondary" 
+                                    style="border-radius: 25px; padding: 0.5rem 2rem; font-size: 1rem;">
+                                Go to Register
+                            </button>
+                        </div>
+                    </form>
                     {% endif %}
+                
                 </div>
             </div>
         </div>
     </div>
 </section>
+
 {% block scripts %}
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
