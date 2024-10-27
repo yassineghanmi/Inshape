@@ -1,27 +1,105 @@
-<!-- workouts/templates/workouts/view_recommendations.html -->
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}About Us | Gym{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Saved Recommendations for {{ user }}</title>
-</head>
-<body>
-    <h1>Saved Recommendations for {{ user }}</h1>
+{% block content %}
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Exercise program</h2>
+                        <div class="bt-option">
+                            <a href="./index.html">Home</a>
+                            <span>Exercise program</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
 
-    {% for recommendation in recommendations %}
-        <h2>{{ recommendation.muscle_group }} Exercises</h2>
-        <ul>
-            {% for exercise in recommendation.exercises.all %}
-                <li>
-                    <strong>{{ exercise.title }}</strong> - {{ exercise.equipment }} (Body Part: {{ exercise.body_part }})
-                    <p>{{ exercise.description }}</p>
-                </li>
-            {% endfor %}
-        </ul>
-    {% endfor %}
+    <!-- View Recommendations Section Begin -->
+    <section class="recommendations-section py-5" style="background-color: #151515;">
+        <div class="px-5">
+            <h1 class="text-center mb-4" style="color: red">Saved Recommendations for {{ user }}</h1>
 
-    <a href="{% url 'generate_exercise' %}">Generate New Recommendations</a>
-</body>
-</html>
+            {% if recommendations %}
+                {% for recommendation in recommendations %}
+                    <div class="recommendation-card mb-4 p-4 border rounded shadow-sm"
+                         style="background-color: #212121;">
+                        <div class="d-flex justify-content-between">
+                            <h2 style="color: red;" class="pb-2">{{ recommendation.muscle_group }} Exercises</h2>
+                            <form action="{% url 'delete_recommendation' recommendation.id %}" method="POST"
+                                  style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn" style="background: red ; color: white">X</button>
+                            </form>
+                        </div>
+                        <ul class="list-unstyled">
+                            {% for exercise in recommendation.exercises.all %}
+                                <li class="mb-3 text-white">
+                                    <strong>{{ exercise.title }}</strong> - <em
+                                        class="text-danger">{{ exercise.equipment }}</em> (Body Part: <span
+                                        class="text-danger">{{ exercise.body_part }}</span>)
+                                    <p class="mt-2">{{ exercise.description }}</p>
+                                </li>
+                            {% endfor %}
+                        </ul>
+
+                    </div>
+                {% endfor %}
+            {% else %}
+                <div class="text-center" style="background-color: #151515; color: white; padding: 100px;">
+                    <h4 style="color: white ; margin-bottom: 24px">No Recommendations Available</h4>
+                    <p>It seems there are currently no exercise recommendations available. Please check back later or
+                        try to generate another one!</p>
+                </div>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="{% url 'generate_exercise' %}" class="btn" style="background: red; color:white;">Generate New
+                    Recommendations</a>
+            </div>
+        </div>
+    </section>
+    <!-- View Recommendations Section End -->
+
+
+
+
+    <div class="gettouch-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-map-marker"></i>
+                        <p>
+                            333 Middle Winchendon Rd, Rindge,<br/>
+                            NH 03461
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-mobile"></i>
+                        <ul>
+                            <li>125-711-811</li>
+                            <li>125-668-886</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text email">
+                        <i class="fa fa-envelope"></i>
+                        <p>Support.gymcenter@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Get In Touch Section End -->
+    <!-- Pricing Section End -->
+{% endblock %}

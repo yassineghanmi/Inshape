@@ -83,3 +83,14 @@ def view_recommendations(request, user):
         'recommendations': recommendations,
         'user': user
     })
+
+def delete_recommendation(request, recommendation_id):
+    try:
+        recommendation = RecommendedExercise.objects.get(id=recommendation_id)
+        recommendation.delete()
+        messages.success(request, 'Recommendation deleted successfully.')
+    except RecommendedExercise.DoesNotExist:
+        messages.error(request, 'Recommendation not found.')
+
+    # Redirect back to the recommendations view
+    return redirect('view_recommendations', user=request.user)

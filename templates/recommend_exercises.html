@@ -1,38 +1,97 @@
-<!-- workouts/templates/workouts/recommend_exercises.html -->
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}About Us | Gym{% endblock %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recommended Exercises</title>
-</head>
-<body>
-    <h1>Recommended Exercises for {{ user }} ({{ muscle_group }})</h1>
+{% block content %}
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Generate Exercise</h2>
+                        <div class="bt-option">
+                            <a href="./index.html">Home</a>
+                            <span>Generate Exercise</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
 
-    <form method="post" action="{% url 'save_exercise_recommendation' %}">
-        {% csrf_token %}
-        <input type="hidden" name="user" value="{{ user }}">
-        <input type="hidden" name="muscle_group" value="{{ muscle_group }}">
+    <!-- Recommend Section Begin -->
+    <div class="p-5" style="background-color: #151515;">
+        <h1 class="text-center mb-4" style="color:red">Recommended Exercises for {{ user }} ({{ muscle_group }})</h1>
 
-        <ul>
-            {% for exercise in recommended_exercises %}
-                <li>
-                    <strong>{{ exercise.0 }}</strong> - {{ exercise.1 }} (Body Part: {{ exercise.2 }})
-                    <p>{{ exercise.3 }}</p>
+        <form method="post" action="{% url 'save_exercise_recommendation' %}" class="p-4 rounded" style="background-color: #1a1a1a;">
+            {% csrf_token %}
+            <input type="hidden" name="user" value="{{ user }}">
+            <input type="hidden" name="muscle_group" value="{{ muscle_group }}">
 
-                    <!-- Hidden fields to pass exercise data -->
-                    <input type="hidden" name="exercises[]" value="{{ exercise.0 }}">
-                    <input type="hidden" name="body_part_{{ exercise.0 }}" value="{{ exercise.2 }}">
-                    <input type="hidden" name="equipment_{{ exercise.0 }}" value="{{ exercise.1 }}">
-                    <input type="hidden" name="description_{{ exercise.0 }}" value="{{ exercise.3 }}">
-                </li>
-            {% endfor %}
-        </ul>
+            <ul class="list-unstyled">
+                {% for exercise in recommended_exercises %}
+                    <li class="mb-3 p-3 border rounded" style="background-color: #212121; color:white">
+                        <strong class="text-danger">{{ exercise.0 }}</strong> - <span
+                            class="text-white">{{ exercise.1 }}</span> (Body Part: <span
+                            class="text-danger">{{ exercise.2 }}</span>)
+                        <p class="text-white">{{ exercise.3 }}</p>
 
-        <button type="submit">Save Recommendations</button>
-    </form>
+                        <!-- Hidden fields to pass exercise data -->
+                        <input type="hidden" name="exercises[]" value="{{ exercise.0 }}">
+                        <input type="hidden" name="body_part_{{ exercise.0 }}" value="{{ exercise.2 }}">
+                        <input type="hidden" name="equipment_{{ exercise.0 }}" value="{{ exercise.1 }}">
+                        <input type="hidden" name="description_{{ exercise.0 }}" value="{{ exercise.3 }}">
+                    </li>
+                {% endfor %}
+            </ul>
 
-    <a href="{% url 'generate_exercise' %}">Regenerate</a>
-</body>
-</html>
+            <div class="text-center mt-4">
+                <button type="submit" class="btn " style="background: red; color: white">Save Recommendations</button>
+            </div>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{% url 'generate_exercise' %}" class="text-danger">Regenerate</a>
+        </div>
+    </div>
+
+    <!-- Recommend Section End -->
+
+
+
+
+    <div class="gettouch-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-map-marker"></i>
+                        <p>
+                            333 Middle Winchendon Rd, Rindge,<br/>
+                            NH 03461
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-mobile"></i>
+                        <ul>
+                            <li>125-711-811</li>
+                            <li>125-668-886</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text email">
+                        <i class="fa fa-envelope"></i>
+                        <p>Support.gymcenter@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Get In Touch Section End -->
+    <!-- Pricing Section End -->
+{% endblock %}

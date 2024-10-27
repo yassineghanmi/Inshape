@@ -1,17 +1,115 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generate Exercises</title>
-</head>
-<body>
-    <h1>Generate Exercise Recommendations</h1>
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}About Us | Gym{% endblock %}
 
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Generate</button>
-    </form>
-</body>
-</html>
+{% block content %}
+    <!-- Breadcrumb Section Begin -->
+    <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <div class="breadcrumb-text">
+                        <h2>Generate Exercise</h2>
+                        <div class="bt-option">
+                            <a href="./index.html">Home</a>
+                            <span>Generate Exercise</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Breadcrumb Section End -->
+
+    <!-- Generate Exercise Begin -->
+
+    <div class="p-5" style="background-color: #151515;">
+        <h1 class="text-center pb-4 p-5" style="color: red;">Generate Exercise Recommendations</h1>
+
+        <form method="post" class="rounded"
+              style="background-color: #1a1a1a; padding: 100px 150px;">
+            {% csrf_token %}
+
+            <div class="form-group row p-3">
+                <!-- User Name Field -->
+                <label for="id_user" class="col-sm-4 col-form-label text-white font-weight-bold">User Name</label>
+                <div class="col-sm-8">
+                    {{ form.user }}
+                </div>
+            </div>
+
+            <div class="form-group row p-3">
+                <!-- Muscle Group Field -->
+                <label for="id_muscle_group" class="col-sm-4 col-form-label text-white font-weight-bold">Muscle
+                    Group</label>
+                <div class="col-sm-8">
+                    {{ form.muscle_group }}
+                </div>
+            </div>
+
+            <div class="form-group row p-3">
+                <!-- Experience Level Field -->
+                <label for="id_level" class="col-sm-4 col-form-label text-white font-weight-bold">Experience
+                    Level</label>
+                <div class="col-sm-8">
+                    {{ form.level }}
+                </div>
+            </div>
+
+            <div class="form-group row p-3">
+                <!-- Number of Exercises Field -->
+                <label for="id_total_exercises" class="col-sm-4 col-form-label text-white font-weight-bold">Number of
+                    Exercises</label>
+                <div class="col-sm-8">
+                    {{ form.total_exercises }}
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" class="btn" style="background-color: red; color: white; font-size: 18px;">
+                    Generate
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+
+    <!-- Generate Exercise End -->
+
+
+
+    <div class="gettouch-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-map-marker"></i>
+                        <p>
+                            333 Middle Winchendon Rd, Rindge,<br/>
+                            NH 03461
+                        </p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text">
+                        <i class="fa fa-mobile"></i>
+                        <ul>
+                            <li>125-711-811</li>
+                            <li>125-668-886</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="gt-text email">
+                        <i class="fa fa-envelope"></i>
+                        <p>Support.gymcenter@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Get In Touch Section End -->
+    <!-- Pricing Section End -->
+{% endblock %}

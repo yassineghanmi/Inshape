@@ -50,15 +50,10 @@
                 <li><a href="{% url 'services' %}">Services</a></li>
                 <li><a href="{% url 'team' %}">Our Team</a></li>
                 <li>
-                    <a href="#">Pages</a>
+                    <a href="#">Exercises</a>
                     <ul class="dropdown">
-                        <li><a href="{% url 'about_us' %}">About us</a></li>
-                        <li><a href="{% url 'class_timetable' %}">Classes timetable</a></li>
-                        <li><a href="{% url 'bmi_calculator' %}">Bmi calculate</a></li>
-                        <li><a href="{% url 'team' %}">Our team</a></li>
-                        <li><a href="{% url 'gallery' %}">Gallery</a></li>
-                        <li><a href="{% url 'blog' %}">Our blog</a></li>
-                        <li><a href="{% url 'error_404' %}">404</a></li>
+                        <li><a href="{% url 'generate_exercise' %}">Generated Exercise</a></li>
+                        <li><a href="{% url 'view_recommendations' user='yassine' %}">REE</a></li>
                     </ul>
                 </li>
                 <li><a href="{% url 'contact' %}">Contact</a></li>
@@ -96,17 +91,10 @@
                             <li><a href="{% url 'services' %}">Services</a></li>
                             <li><a href="{% url 'team' %}">Our Team</a></li>
                             <li>
-                                <a href="#">Pages</a>
+                                <a href="#">Exercises</a>
                                 <ul class="dropdown">
-                                    <li><a href="{% url 'about_us' %}">About us</a></li>
-                                    <li>
-                                        <a href="{% url 'class_timetable' %}">Classes timetable</a>
-                                    </li>
-                                    <li><a href="{% url 'bmi_calculator' %}">Bmi calculate</a></li>
-                                    <li><a href="{% url 'team' %}">Our team</a></li>
-                                    <li><a href="{% url 'gallery' %}">Gallery</a></li>
-                                    <li><a href="{% url 'blog' %}">Our blog</a></li>
-                                    <li><a href="{% url 'error_404' %}">404</a></li>
+                                    <li><a href="{% url 'generate_exercise' %}">Generated Exercise</a></li>
+                                    <li><a href="{% url 'view_recommendations' user='yassine' %}">Exercise program</a></li>
                                 </ul>
                             </li>
                             <li><a href="{% url 'contact' %}">Contact</a></li>
