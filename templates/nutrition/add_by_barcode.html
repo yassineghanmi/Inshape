@@ -49,7 +49,7 @@
 
         <!-- Add button to save the product -->
         <div class="leave-comment">
-        <form method="post" action="{% url 'add_nutrition' %}">
+        <form method="post" action="{% url 'nutrition_create' %}">
             {% csrf_token %}
             <input type="hidden" name="name" value="{{ product_info.product_name }}">
             <input type="hidden" name="calories" value="{{ product_info.nutriments.energy }}">
