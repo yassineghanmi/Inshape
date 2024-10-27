@@ -24,24 +24,30 @@ def nutrition_list(request):
 api = openfoodfacts.API(user_agent="MyAwesomeApp/1.0")
 def add_by_barcode(request):
     product_info = None
+    selected_date = request.GET.get('date')  # Get date from query parameters if available
+
     if request.method == 'POST':
         form = BarcodeImageForm(request.POST, request.FILES)
         if form.is_valid():
             # Read and process the uploaded image
             image_file = form.cleaned_data['image']
             img = cv2.imdecode(np.frombuffer(image_file.read(), np.uint8), cv2.IMREAD_COLOR)
-            
+
             # Detect barcode in the image
             results = zxingcpp.read_barcodes(img)
             if results:
                 barcode = results[0].text
                 # Fetch product data from OpenFoodFacts
-                product_info = api.product.get(barcode, fields=["code", "product_name", "nutriments","selected_images"])
+                product_info = api.product.get(barcode, fields=["code", "product_name", "nutriments", "selected_images"])
+                
+                # Here you could set the selected_date or current date if necessary
+                if 'selected_date' not in product_info:  # Assuming product_info is a dictionary
+                    product_info['selected_date'] = selected_date or timezone.now().date()  # Default to today if no date is provided
             else:
                 product_info = {"error": "Could not find any barcode."}
     else:
         form = BarcodeImageForm()
-    
+
     return render(request, 'nutrition/add_by_barcode.html', {'form': form, 'product_info': product_info})
 
 

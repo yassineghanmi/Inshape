@@ -38,7 +38,10 @@ class NutritionForm(forms.ModelForm):
     def _validate_decimal(self, field_name):
         value = self.cleaned_data.get(field_name)
         try:
-            return Decimal(value) if value is not None else None
+            decimal_value = Decimal(value) if value is not None else None
+            if decimal_value is not None and decimal_value < 0:
+                raise forms.ValidationError(f"{field_name.capitalize()} must be a positive number.")
+            return decimal_value
         except (InvalidOperation, ValueError):
             raise forms.ValidationError(f"Please enter a valid decimal number for {field_name}.")
 

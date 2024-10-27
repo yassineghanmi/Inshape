@@ -4,8 +4,8 @@
 {% load static %}
 {% block title %}<h1>Add Product by Barcode</h1>{% endblock %}
 {% block content %}
- <!-- Breadcrumb Section Begin -->
- <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
@@ -32,20 +32,19 @@
             </form>
         </div>
 
-
 {% if product_info %}
     {% if product_info.error %}
-        <p>{{ product_info.error }}</p>
+        <p >{{ product_info.error }}</p>
     {% else %}
     
-        <h3 ><p>Product Information</p></h3>
+        <h3><p>Product Information</p></h3>
         <p><strong>Code:</strong> {{ product_info.code }}</p>
         <p><strong>Product Name:</strong> {{ product_info.product_name }}</p>
         <p><strong>Energy:</strong> {{ product_info.nutriments.energy }}</p>
         <p><strong>Carbohydrates:</strong> {{ product_info.nutriments.carbohydrates }}</p>
         <p><strong>Fat:</strong> {{ product_info.nutriments.fat }}</p>
         <p><strong>Proteins:</strong> {{ product_info.nutriments.proteins }}</p>
-        <p><strong>sugars:</strong> {{ product_info.nutriments.sugars }}</p>
+        <p><strong>Sugars:</strong> {{ product_info.nutriments.sugars }}</p>
         <img src="{{ product_info.selected_images.front.display.fr }}">
 
         <!-- Add button to save the product -->
@@ -58,6 +57,7 @@
             <input type="hidden" name="carbohydrates" value="{{ product_info.nutriments.carbohydrates }}">
             <input type="hidden" name="fats" value="{{ product_info.nutriments.fat }}">
             <input type="hidden" name="sugars" value="{{ product_info.nutriments.sugars }}">
+            <input type="hidden" name="selected_date" value="{{ product_info.selected_date }}"> <!-- Hidden field for selected_date -->
             <button type="submit">Add</button>
         </form>
         </div>
@@ -65,6 +65,7 @@
     {% endif %}
 {% endif %}
 
-</div></section>
+</div>
+</section>
 
 {% endblock %}
