@@ -8,7 +8,7 @@ class Nutrition(models.Model):
     carbohydrates = models.DecimalField(max_digits=5, decimal_places=2)
     sugars = models.DecimalField(max_digits=5, decimal_places=2)
     fats = models.DecimalField(max_digits=5, decimal_places=2)
-    created_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=False)
     updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):

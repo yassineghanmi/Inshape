@@ -26,10 +26,13 @@
         <div class="row justify-content-center">
             <div class="col-lg-6">
                 <div class="leave-comment">
-                    <form method="post" class="mx-auto" style="max-width: 400px;">
+                    <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ form.as_p }}
-                        <button type="submit" class="btn btn-primary mt-3">Save</button>
+                        {% if selected_date %}
+                            <input type="hidden" name="selected_date" value="{{ selected_date }}">
+                        {% endif %}
+                        <button type="submit">Add Nutrition Item</button>
                     </form>
                 </div>
             </div>

@@ -60,15 +60,25 @@ def add_nutrition(request):
 
 # Create view
 def nutrition_create(request):
+    selected_date = request.GET.get('date')  # Get date from the query params if available
+
     if request.method == 'POST':
         form = NutritionForm(request.POST)
         if form.is_valid():
-            form.save()
+            nutrition_item = form.save(commit=False)
+
+            # If selected_date is provided, set it to created_at; otherwise, use the current date
+            if form.cleaned_data['selected_date']:
+                nutrition_item.created_at = form.cleaned_data['selected_date']
+            else:
+                nutrition_item.created_at = timezone.now()
+
+            nutrition_item.save()
             return redirect('nutrition_list')
     else:
-        form = NutritionForm()
-    return render(request, 'nutrition/nutrition_form.html', {'form': form})
+        form = NutritionForm(initial={'selected_date': selected_date})  # Pass selected date to the form
 
+    return render(request, 'nutrition/nutrition_form.html', {'form': form})
 # Update view
 def nutrition_update(request, pk):
     item = get_object_or_404(Nutrition, pk=pk)
