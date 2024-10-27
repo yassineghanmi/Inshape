@@ -34,7 +34,7 @@ urlpatterns = [
     path('about-us/', views.about_us, name='about_us'),
     path('admin/', admin.site.urls),
     path('exercises/', include('workouts.urls')),
-     # Authentication URLs (customize password reset email here)
+    # Authentication URLs (customize password reset email here)
     path(
         'accounts/password_reset/',
         auth_views.PasswordResetView.as_view(
@@ -45,10 +45,10 @@ urlpatterns = [
         name='password_reset'
     ),
     path('accounts/', include('django.contrib.auth.urls')),
+
     path('accounts/register/', registration_view, name='register'),
     path("accounts/profile/", profile, name="profile"),
-
-   path('getResponse', views.getResponse, name='getResponse'),
-
+    path('getResponse', views.getResponse, name='getResponse'),
+    path('routine/', include('routineplanner.urls')),
 
 ]

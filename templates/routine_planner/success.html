@@ -1,0 +1,142 @@
+{% extends 'layout.html' %}
+{% load static %}
+
+{% block title %}BMI Calculator | Gym{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb-text">
+                    <h2>Routine Saved Successfully!</h2>
+                    <div class="bt-option">
+                        <a>Your workout routine has been saved</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+
+<!-- Saved Routines Section Begin -->
+<section class="services-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="section-title">
+                    <span>Your Routines</span>
+                    <h2>Explore Saved Workout Routines</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            {% for routine in routines %}
+                <div class="col-lg-3 col-md-6 p-0">
+                    <div class="ss-text">
+                        <h4><i class="fa fa-clipboard-list"></i> {{ routine.name }}</h4>
+                        <p><strong><i class="fa fa-user"></i> Created By:</strong> {{ routine.created_by }}</p>
+                        <a href="{% url 'routine_detail' routine.id %}" class="btn btn-outline-primary">View Details</a>
+                        <!-- Delete Button -->
+                        <form action="{% url 'delete_routine' routine.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button class="delete-button" type="button" onclick="confirmDelete(event, this)">
+                                <i class="fa fa-trash"></i> <!-- FontAwesome trash icon -->
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            {% empty %}
+                <div class="col-lg-12">
+                    <p>No routines found.</p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+<!-- Saved Routines Section End -->
+
+<!-- Get In Touch Section Begin -->
+<div class="gettouch-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="gt-text">
+                    <i class="fa fa-map-marker"></i>
+                    <p>333 Middle Winchendon Rd, Rindge,<br/> NH 03461</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="gt-text">
+                    <i class="fa fa-mobile"></i>
+                    <ul>
+                        <li>125-711-811</li>
+                        <li>125-668-886</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="gt-text email">
+                    <i class="fa fa-envelope"></i>
+                    <p>Support.gymcenter@gmail.com</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Get In Touch Section End -->
+
+<!-- JavaScript Confirmation Dialog -->
+<script>
+    function confirmDelete(event, button) {
+        event.preventDefault(); // Prevent form submission
+        const form = button.parentElement; // Get the form element
+        const routineName = button.closest('.ss-text').querySelector('h4').innerText; // Get the routine name
+
+        // Show confirmation dialog
+        const confirmed = confirm(`Are you sure you want to delete the routine: "${routineName}"?`);
+        if (confirmed) {
+            form.submit(); // Submit the form if confirmed
+        }
+    }
+</script>
+
+<style>
+    .ss-text {
+        padding: 15px; /* Add padding for better spacing */
+        border: 1px solid #444; /* Border for the routine cards */
+        border-radius: 5px; /* Rounded corners */
+        margin-bottom: 20px; /* Spacing between routine cards */
+        background-color: #1e1e1e; /* Background color for cards */
+        color: #ffffff; /* Default text color */
+        transition: transform 0.3s; /* Transition effect for hover */
+    }
+
+    .ss-text:hover {
+        transform: translateY(-5px); /* Lift effect on hover */
+    }
+
+    .delete-button {
+        background-color: transparent; /* Transparent background */
+        border: none; /* No border */
+        color: red; /* Red text color */
+        font-size: 24px; /* Adjust size as needed */
+        cursor: pointer; /* Pointer cursor on hover */
+        margin-left: 10px; /* Space between view and delete buttons */
+    }
+
+    .gettouch-section .gt-text {
+        padding: 20px; /* Padding for contact section */
+        background-color: #1e1e1e; /* Background color */
+        border-radius: 5px; /* Rounded corners */
+        margin-bottom: 15px; /* Spacing between contact items */
+    }
+
+    .gettouch-section .gt-text p,
+    .gettouch-section .gt-text ul {
+        color: #ffffff; /* Text color for contact details */
+    }
+</style>
+{% endblock %}

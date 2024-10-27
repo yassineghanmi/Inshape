@@ -13,7 +13,6 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -40,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'workouts',
+    'routineplanner'
+
 ]
 
 MIDDLEWARE = [
@@ -121,6 +122,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
@@ -128,7 +130,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 mail = os.environ.get('MAIL')
 mail_pass = os.environ.get('Mail_PASSWORD')
-print(f"Mail: {mail}, Password: {mail_pass}") 
+print(f"Mail: {mail}, Password: {mail_pass}")
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
