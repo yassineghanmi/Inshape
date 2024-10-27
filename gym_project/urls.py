@@ -33,7 +33,7 @@ urlpatterns = [
     path('contact/', views.contact, name='contact'),
     path('about-us/', views.about_us, name='about_us'),
     path('admin/', admin.site.urls),
-    path('api/exercises/', include('workouts.urls')),
+    path('exercises/', include('workouts.urls')),
      # Authentication URLs (customize password reset email here)
     path(
         'accounts/password_reset/',
@@ -49,6 +49,6 @@ urlpatterns = [
     path("accounts/profile/", profile, name="profile"),
 
    path('getResponse', views.getResponse, name='getResponse'),
-   
-    
+
+
 ]

@@ -1,73 +1,97 @@
 # workouts/views.py
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework import status
-from .models import Exercise
-from .serializers import ExerciseSerializer
-from ml_models.exercise_recommender import get_exercise_recommendation  # import your ML model from wherever it's stored
-from rest_framework import generics
-from .models import RecommendedExercise
-from .serializers import RecommendedExerciseSerializer
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
 
-import math
+from .models import Exercise, RecommendedExercise
+from .forms import RecommendationForm
+from ml_models.exercise_recommender import get_exercise_recommendation
+from django.contrib.auth.decorators import login_required
+@login_required
+def generate_exercise(request):
+    if request.method == 'POST':
+        form = RecommendationForm(request.POST)
+        if form.is_valid():
+            muscle_group = form.cleaned_data['muscle_group']
+            level = form.cleaned_data['level']
+            total_exercises = form.cleaned_data['total_exercises']
+            user = request.user
 
-class ExerciseRecommendationView(APIView):
-    def post(self, request):
-        muscle_group = request.data.get('muscle_group')
-        level = request.data.get('level')
-        total_exercises = request.data.get('total_exercises', 8)
+            # Generate the recommendation using the ML model
+            recommended_exercises_data = get_exercise_recommendation(muscle_group, level, total_exercises)
 
-        try:
-            recommendations = get_exercise_recommendation(muscle_group, level, total_exercises)
-            response_data = []
+            # Show recommendations to the user
+            return render(request, 'recommend_exercises.html', {
+                'recommended_exercises': recommended_exercises_data,
+                'user': user,
+                'muscle_group': muscle_group
+            })
+    else:
+        form = RecommendationForm()
 
-            for title, equipment, body_part, description in recommendations:
-                # Check for nan values and replace them with a string "nan" or None
-                if isinstance(description, float) and math.isnan(description):
-                    description = "Empty"  # or description = None
+    return render(request, 'generate_exercise.html', {'form': form})
 
-                response_data.append({
-                    "title": title,
-                    "body_part": body_part,
-                    "equipment": equipment,
-                    "description": description
-                })
+@login_required
+def save_exercise_recommendation(request):
+    if request.method == 'POST':
+        muscle_group = request.POST.get('muscle_group')
+        user = request.POST.get('user')
+        exercises = request.POST.getlist('exercises[]')  # List of exercise titles from the form
 
-            return Response(response_data, status=status.HTTP_200_OK)
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        # Check if recommendation already exists for this user and muscle group
+        recommendation, created = RecommendedExercise.objects.get_or_create(
+            user=user,
+            muscle_group=muscle_group
+        )
 
+        # Clear previous exercises if updating the recommendation
+        if not created:
+            recommendation.exercises.clear()
 
-# List all recommended exercises and create new recommendation
-class RecommendedExerciseListCreateView(generics.ListCreateAPIView):
-    queryset = RecommendedExercise.objects.all()
-    serializer_class = RecommendedExerciseSerializer
+        # Add the new exercises to the recommendation
+        for exercise_title in exercises:
+            try:
+                # Find the exercise by title, using case-insensitive matching and stripping whitespaces
+                exercise = Exercise.objects.get(title__iexact=exercise_title.strip())
+                recommendation.exercises.add(exercise)  # Add exercise to the ManyToMany field
+            except Exercise.DoesNotExist:
+                # If an exercise doesn't exist, create it dynamically (e.g., from the generated data)
+                # Assuming the form or ML model provides the necessary fields:
+                description = request.POST.get(f"description_{exercise_title}", "No description")
+                body_part = request.POST.get(f"body_part_{exercise_title}", "Unknown body part")
+                equipment = request.POST.get(f"equipment_{exercise_title}", "Unknown equipment")
 
-    def perform_create(self, serializer):
-        # Customize creation logic to save muscle_group
-        muscle_group = self.request.data.get('muscle_group')
-        serializer.save(muscle_group=muscle_group)
+                # Create the new exercise
+                exercise = Exercise.objects.create(
+                    title=exercise_title.strip(),
+                    body_part=body_part,
+                    equipment=equipment,
+                    description=description
+                )
 
+                # Add the new exercise to the recommendation
+                recommendation.exercises.add(exercise)
 
-# Retrieve, update, or delete a specific recommended exercise
-class RecommendedExerciseDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = RecommendedExercise.objects.all()
-    serializer_class = RecommendedExerciseSerializer
+        recommendation.save()  # Save the recommendation after adding exercises
 
-# Create a view to retrieve recommended exercises by user and muscle group
-class RecommendedExerciseByUserAndMuscleGroupView(generics.ListAPIView):
-    serializer_class = RecommendedExerciseSerializer
+        return redirect('view_recommendations', user=request.user)
 
-    def get_queryset(self):
-        user = self.request.query_params.get('user')
-        muscle_group = self.request.query_params.get('muscle_group')
+    return redirect('generate_exercise')
+@login_required
+def view_recommendations(request, user):
+    recommendations = RecommendedExercise.objects.filter(user=user)
+    return render(request, 'view_recommendations.html', {
+        'recommendations': recommendations,
+        'user': request.user
+    })
+@login_required
+def delete_recommendation(request, recommendation_id):
+    try:
+        recommendation = RecommendedExercise.objects.get(id=recommendation_id)
+        recommendation.delete()
+        messages.success(request, 'Recommendation deleted successfully.')
+    except RecommendedExercise.DoesNotExist:
+        messages.error(request, 'Recommendation not found.')
 
-        # Filter based on user and muscle group
-        queryset = RecommendedExercise.objects.all()
-        if user:
-            queryset = queryset.filter(user=user)
-        if muscle_group:
-            queryset = queryset.filter(muscle_group=muscle_group)
-
-        return queryset
+    # Redirect back to the recommendations view
+    return redirect('view_recommendations', user=request.user)
