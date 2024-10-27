@@ -20,6 +20,7 @@ from django.contrib.auth import views as auth_views
 from gym_project.views import registration_view, profile
 from gym_project import views
 
+
 urlpatterns = [
     path('', views.index, name='index'),
     path('class-details/', views.classes, name='class_details'),
@@ -45,10 +46,9 @@ urlpatterns = [
         name='password_reset'
     ),
     path('accounts/', include('django.contrib.auth.urls')),
-
     path('accounts/register/', registration_view, name='register'),
     path("accounts/profile/", profile, name="profile"),
     path('getResponse', views.getResponse, name='getResponse'),
     path('routine/', include('routineplanner.urls')),
-
+    path('nutrition/',include('nutrition.urls')),
 ]

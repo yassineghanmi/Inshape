@@ -1,0 +1,29 @@
+<!-- templates/food_search.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Search</title>
+</head>
+<body>
+    <h1>Search for Food</h1>
+    <form method="get">
+        {{ form.as_p }}
+        <button type="submit">Search</button>
+    </form>
+
+    <h2>Results</h2>
+    <ul>
+        {% for product in results %}
+            <li>
+                <strong>{{ product.product_name }}</strong><br>
+                <img src="{{ product.image_url }}" alt="Product image" width="100"><br>
+                <em>Brand:</em> {{ product.brands }}<br>
+                <em>Calories:</em> {{ product.nutriments.energy_100g }} kcal per 100g<br>
+            </li>
+        {% empty %}
+            <li>No results found.</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

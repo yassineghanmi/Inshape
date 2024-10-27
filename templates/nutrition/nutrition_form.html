@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}{% if form.instance.pk %}Edit{% else %}Add{% endif %} Nutrition{% endblock %}
+{% block content %}
+ <!-- Breadcrumb Section Begin -->
+ <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb-text">
+                    <h2>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Nutrition</h2>
+                    <div class="bt-option">
+                        <a href="./index.html">Home</a>
+                        <a href="#">Pages</a>
+                        <span>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Nutrition</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+ <!-- Contact Section Begin -->
+ <section class="contact-section spad">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-6">
+                <div class="leave-comment">
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        {% if selected_date %}
+                            <input type="hidden" name="selected_date" value="{{ selected_date }}">
+                        {% endif %}
+                        
+                        <button type="submit">Add Nutrition Item</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+{% endblock %}

@@ -1,0 +1,71 @@
+<!-- nutrition/templates/nutrition/add_by_barcode.html -->
+
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}<h1>Add Product by Barcode</h1>{% endblock %}
+{% block content %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/breadcrumb-bg.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb-text">
+                    <h2>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Nutrition</h2>
+                    <div class="bt-option">
+                        <a href="./index.html">Home</a>
+                        <a href="#">Pages</a>
+                        <span>{% if form.instance.pk %}Edit{% else %}Add{% endif %} Nutrition</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Breadcrumb Section End -->
+<section class="contact-section spad">
+    <div class="container">
+        <div class="leave-comment">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+
+{% if product_info %}
+    {% if product_info.error %}
+        <p >{{ product_info.error }}</p>
+    {% else %}
+    
+        <h3><p>Product Information</p></h3>
+        <p><strong>Code:</strong> {{ product_info.code }}</p>
+        <p><strong>Product Name:</strong> {{ product_info.product_name }}</p>
+        <p><strong>Energy:</strong> {{ product_info.nutriments.energy }}</p>
+        <p><strong>Carbohydrates:</strong> {{ product_info.nutriments.carbohydrates }}</p>
+        <p><strong>Fat:</strong> {{ product_info.nutriments.fat }}</p>
+        <p><strong>Proteins:</strong> {{ product_info.nutriments.proteins }}</p>
+        <p><strong>Sugars:</strong> {{ product_info.nutriments.sugars }}</p>
+        <img src="{{ product_info.selected_images.front.display.fr }}">
+
+        <!-- Add button to save the product -->
+        <div class="leave-comment">
+        <form method="post" action="{% url 'add_nutrition' %}">
+            {% csrf_token %}
+            <input type="hidden" name="name" value="{{ product_info.product_name }}">
+            <input type="hidden" name="calories" value="{{ product_info.nutriments.energy }}">
+            <input type="hidden" name="protein" value="{{ product_info.nutriments.proteins }}">
+            <input type="hidden" name="carbohydrates" value="{{ product_info.nutriments.carbohydrates }}">
+            <input type="hidden" name="fats" value="{{ product_info.nutriments.fat }}">
+            <input type="hidden" name="sugars" value="{{ product_info.nutriments.sugars }}">
+            <input type="hidden" name="selected_date" value="{{ product_info.selected_date }}"> <!-- Hidden field for selected_date -->
+            <button type="submit">Add</button>
+        </form>
+        </div>
+
+    {% endif %}
+{% endif %}
+
+</div>
+</section>
+
+{% endblock %}

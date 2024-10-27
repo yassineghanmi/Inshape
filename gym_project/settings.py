@@ -39,8 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'workouts',
-    'routineplanner'
-
+    'routineplanner',
+    'nutrition',
+    'sweetify',
 ]
 
 MIDDLEWARE = [
