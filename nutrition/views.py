@@ -13,12 +13,27 @@ import sweetify
 from django.http import JsonResponse
 # List view
 def nutrition_list(request):
-       # Get the selected date from the request (if provided) or default to today
+    # Get the selected date from the request (if provided) or default to today
     selected_date = request.GET.get('date', timezone.now().date())
-    # Filter nutrition items by the selected date
-    items = Nutrition.objects.filter(created_at__date=selected_date).order_by('created_at')
     
-    return render(request, 'nutrition/nutrition_list.html', {'items': items, 'selected_date': selected_date})
+    # Get the search query from the request (if provided)
+    search_query = request.GET.get('search', '')  # Get the search query
+
+    # Filter nutrition items by the selected date and search query
+    items = Nutrition.objects.filter(created_at__date=selected_date)
+    
+    if search_query:
+        items = items.filter(name__icontains=search_query)  # Filter by name using case-insensitive containment
+    
+    # Calculate the sum of calories
+    total_calories = sum(item.calories for item in items)
+
+    return render(request, 'nutrition/nutrition_list.html', {
+        'items': items,
+        'selected_date': selected_date,
+        'total_calories': total_calories,
+        'search_query': search_query,  # Pass search query to the template
+    })
 
    # Initialize the API
 api = openfoodfacts.API(user_agent="MyAwesomeApp/1.0")
@@ -66,23 +81,27 @@ def add_nutrition(request):
 
 # Create view
 def nutrition_create(request):
-    selected_date = request.GET.get('date')  # Get date from the query params if available
-
     if request.method == 'POST':
         form = NutritionForm(request.POST)
         if form.is_valid():
+            # Create a new Nutrition instance
             nutrition_item = form.save(commit=False)
-
-            # If selected_date is provided, set it to created_at; otherwise, use the current date
-            if form.cleaned_data['selected_date']:
-                nutrition_item.created_at = form.cleaned_data['selected_date']
-            else:
-                nutrition_item.created_at = timezone.now()
-
+            # Set created_at field to the current date and time
+            nutrition_item.created_at = timezone.now()
+            # Save the instance
             nutrition_item.save()
             return redirect('nutrition_list')
     else:
-        form = NutritionForm(initial={'selected_date': selected_date})  # Pass selected date to the form
+        # Get the data from the query parameters
+        initial_data = {
+            'name': request.GET.get('name', ''),
+            'calories': request.GET.get('calories', ''),
+            'protein': request.GET.get('protein', ''),
+            'carbohydrates': request.GET.get('carbohydrates', ''),
+            'sugars': request.GET.get('sugars', ''),
+            'fats': request.GET.get('fats', ''),
+        }
+        form = NutritionForm(initial=initial_data)  # Pre-fill the fields with initial data
 
     return render(request, 'nutrition/nutrition_form.html', {'form': form})
 # Update view
@@ -91,10 +110,17 @@ def nutrition_update(request, pk):
     if request.method == 'POST':
         form = NutritionForm(request.POST, instance=item)
         if form.is_valid():
-            form.save()
+            nutrition_item = form.save(commit=False)
+
+            # Check if selected_date is empty and set it to today's date if necessary
+            if not form.cleaned_data['selected_date']:
+                nutrition_item.selected_date = timezone.now().date()
+
+            nutrition_item.save()
             return redirect('nutrition_list')
     else:
         form = NutritionForm(instance=item)
+
     return render(request, 'nutrition/nutrition_form.html', {'form': form})
 
 # Delete view
