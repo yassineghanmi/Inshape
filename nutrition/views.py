@@ -9,8 +9,8 @@ import zxingcpp
 import openfoodfacts
 from .forms import BarcodeImageForm ,SearchForm
 import numpy as np
-
-
+import sweetify
+from django.http import JsonResponse
 # List view
 def nutrition_list(request):
        # Get the selected date from the request (if provided) or default to today
@@ -84,7 +84,8 @@ def nutrition_update(request, pk):
 # Delete view
 def nutrition_delete(request, pk):
     item = get_object_or_404(Nutrition, pk=pk)
-    if request.method == 'POST':
+    try:
         item.delete()
-        return redirect('nutrition_list')
-    return render(request, 'nutrition/nutrition_confirm_delete.html', {'item': item})
+        return JsonResponse({'success': True})  # JSON success response
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500) 

@@ -2,12 +2,13 @@
 {% load static %}
 {% block title %}Nutrition List{% endblock %}
 {% block content %}
+
 <section class="breadcrumb-section set-bg" data-setbg="{% static 'img/banner-bg.jpg' %}">
     <div class="container">
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="breadcrumb-text">
-                    <h2>Nutrition </h2>
+                    <h2>Nutrition</h2>
                     <div class="bt-option">
                         <a href="./index.html">Home</a>
                         <a href="#">Pages</a>
@@ -19,64 +20,125 @@
     </div>
 </section>
 
-<!-- Dropdown Button -->
-
-
 <section class="bmi-calculator-section spad">
-    
-<div class="container">
-    
-    <div class="row">
-        <div class="col-lg-12">
-            <div class="text-404">
-                <form action="#" class="search-404">
-                    <input type="text" placeholder="Enter your keyword">
-                    <button type="submit"><i class="fa fa-search"></i></button>
-                </form>
-                
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="text-404">
+                    <form action="#" class="search-404">
+                        <input type="text" placeholder="Enter your keyword">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-    
-<!-- Date Selector -->
-<form method="get" class="mb-4">
-    <label for="date" class="form-label">Select Date:</label>
-    <input type="date" id="date" name="date" value="{{ selected_date }}" class="form-control" onchange="this.form.submit()">
-</form>
- <!-- Add options --> <div class="chart-calculate-form">
- <li><a class="dropdown-item" href="{% url 'nutrition_create' %}">Add Manual</a></li>
- <li><a class="dropdown-item" href="{% url 'add_by_barcode' %}">Add by Barcode</a></li>
- 
-</div>
 
-<!-- Nutrition items list -->
- <div  class="chart-table"> 
- <table>
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>calories</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in items %}
-            <tr>
-                <td>{{ item.name }}</td>
-                <td class="text-muted">{{ item.calories }}</td>
-                <td>
-                    <a href="{% url 'nutrition_update' item.pk %}" class="text-decoration-none me-2 text-success">Edit</a>
-                    |
-                    <a href="{% url 'nutrition_delete' item.pk %}" class="text-decoration-none ms-2 text-danger">Delete</a>
-                </td>
-            </tr>
-        {% empty %}
-            <tr>
-                <td colspan="3" class="text-center text-muted">No items found for this date.</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-</div>
+        <!-- Date Selector -->
+        <form method="get" class="mb-4">
+            <label for="date" class="form-label">Select Date:</label>
+            <input type="date" id="date" name="date" value="{{ selected_date }}" class="form-control" onchange="this.form.submit()">
+        </form>
+
+        <!-- Add options -->
+        <div class="chart-calculate-form">
+            <li><a class="dropdown-item" href="{% url 'nutrition_create' %}">Add Manual</a></li>
+            <li><a class="dropdown-item" href="{% url 'add_by_barcode' %}">Add by Barcode</a></li>
+        </div>
+
+        <!-- Nutrition items list -->
+        <div class="chart-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Calories</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                        <tr>
+                            <td>{{ item.name }}</td>
+                            <td class="text-muted">{{ item.calories }}</td>
+                           
+                            <td>
+                                <a href="{% url 'nutrition_update' item.pk %}" class="text-decoration-none me-2 text-success">Edit</a> |
+                                <a href="javascript:void(0);" onclick="confirmDelete({{item.pk}})" class="text-decoration-none ms-2 text-danger">Delete</a>
+                                
+
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center text-muted">No items found for this date.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
 </section>
+
+<!-- SweetAlert and JavaScript for delete confirmation -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.startsWith(name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.slice(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    function confirmDelete(itemId) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "This action cannot be undone!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const csrftoken = getCookie('csrftoken');
+                fetch(`nutrition/${itemId}/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': csrftoken,
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to delete item');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        Swal.fire('Deleted!', 'Your item has been deleted.', 'success').then(() => {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire('Error!', data.error || 'There was an error deleting the item.', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Fetch error:', error);
+                    Swal.fire('Error!', 'An unexpected error occurred.', 'error');
+                });
+            }
+        });
+    }
+</script>
+
 {% endblock %}
