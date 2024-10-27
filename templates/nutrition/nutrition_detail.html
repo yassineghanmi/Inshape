@@ -1,0 +1,36 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}Nutrition Detail{% endblock %}
+{% block content %}
+
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/banner-bg.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb-text">
+                    <h2>Nutrition</h2>
+                    <div class="bt-option">
+                        <a href="./index.html">Home</a>
+                        <a href="#">Pages</a>
+                        <span>Nutrition List</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="contact-section spad d-flex justify-content-center align-items-center">
+    <div class="text-center" style="max-width: 500px;">
+        <h2 style="color: red;">{{ item.name }}</h2>
+        <p><strong>Calories:</strong> {{ item.calories }}</p>
+        <p><strong>Protein:</strong> {{ item.protein }}</p>
+        <p><strong>Carbohydrates:</strong> {{ item.carbohydrates }}</p>
+        <p><strong>Sugars:</strong> {{ item.sugars }}</p>
+        <p><strong>Fats:</strong> {{ item.fats }}</p>
+        <a href="{% url 'nutrition_list' %}" class="btn btn-primary mt-3">Back to List</a>
+    </div>
+</section>
+
+
+{% endblock %}

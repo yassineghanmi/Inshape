@@ -102,6 +102,7 @@ def nutrition_create(request):
             'carbohydrates': request.GET.get('carbohydrates', ''),
             'sugars': request.GET.get('sugars', ''),
             'fats': request.GET.get('fats', ''),
+           
         }
         form = NutritionForm(initial=initial_data)  # Pre-fill the fields with initial data
 
@@ -133,3 +134,8 @@ def nutrition_delete(request, pk):
         return JsonResponse({'success': True})  # JSON success response
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=500) 
+# Detail view
+
+def nutrition_detail(request, pk):
+    item = get_object_or_404(Nutrition, pk=pk)
+    return render(request, 'nutrition/nutrition_detail.html', {'item': item})
