@@ -63,7 +63,9 @@
                 <tbody>
                     {% for item in items %}
                         <tr>
-                            <td>{{ item.name }}</td>
+                            <td>
+                                <a href="{% url 'nutrition_detail' item.pk %}" class="text-decoration-none text-primary">{{ item.name }}</a>
+                            </td>
                             <td class="text-muted">{{ item.calories }}</td>
                             <td>
                                 {% if search_query %}

@@ -83,7 +83,7 @@
                 <li><a href="{% url 'about_us' %}">About Us</a></li>
                 <li><a href="{% url 'class_details' %}">Classes</a></li>
                 <li><a href="{% url 'services' %}">Services</a></li>
-                <li><a href="{% url 'team' %}">Our Team</a></li>
+                <li><a href="{% url 'nutrition_list' %}">Nutrition</a></li>
                 {% if user.is_authenticated %}
                     <li>
                         <a href="#">Exercises</a>
@@ -131,7 +131,7 @@
                             <li><a href="{% url 'about_us' %}">About Us</a></li>
                             <li><a href="{% url 'workout_view' %}">Generate routine </a></li>
                             <li><a href="{% url 'success_url' %}">Routines</a></li>
-                            <li><a href="{% url 'team' %}">Our Team</a></li>
+                            <li><a href="{% url 'nutrition_list' %}">Nutrition</a></li>
                             {% if user.is_authenticated %}
                                 <li>
                                     <a href="#">Exercises</a>

@@ -7,11 +7,13 @@ from .forms import NutritionForm  # You'll need to create this form
 import cv2
 import zxingcpp
 import openfoodfacts
-from .forms import BarcodeImageForm ,SearchForm
+from .forms import BarcodeImageForm, SearchForm
 import numpy as np
 import sweetify
 from django.http import JsonResponse
-from django.db.models import Sum ,Count
+from django.db.models import Sum, Count
+
+
 # List view
 def nutrition_list(request):
     # Get the selected date from the request (if provided) or default to today
@@ -37,8 +39,11 @@ def nutrition_list(request):
         'search_query': search_query,  # Pass search query to the template
     })
 
-   # Initialize the API
+
+# Initialize the API
 api = openfoodfacts.API(user_agent="MyAwesomeApp/1.0")
+
+
 def add_by_barcode(request):
     product_info = None
     selected_date = request.GET.get('date')  # Get date from query parameters if available
@@ -55,11 +60,13 @@ def add_by_barcode(request):
             if results:
                 barcode = results[0].text
                 # Fetch product data from OpenFoodFacts
-                product_info = api.product.get(barcode, fields=["code", "product_name", "nutriments", "selected_images"])
+                product_info = api.product.get(barcode,
+                                               fields=["code", "product_name", "nutriments", "selected_images"])
 
                 # Here you could set the selected_date or current date if necessary
                 if 'selected_date' not in product_info:  # Assuming product_info is a dictionary
-                    product_info['selected_date'] = selected_date or timezone.now().date()  # Default to today if no date is provided
+                    product_info[
+                        'selected_date'] = selected_date or timezone.now().date()  # Default to today if no date is provided
             else:
                 product_info = {"error": "Could not find any barcode."}
     else:
@@ -80,6 +87,7 @@ def add_nutrition(request):
 
     form = NutritionForm()
     return render(request, 'nutrition/nutrition_form.html', {'form': form})
+
 
 # Create view
 def nutrition_create(request):
@@ -102,10 +110,13 @@ def nutrition_create(request):
             'carbohydrates': request.GET.get('carbohydrates', ''),
             'sugars': request.GET.get('sugars', ''),
             'fats': request.GET.get('fats', ''),
+
         }
         form = NutritionForm(initial=initial_data)  # Pre-fill the fields with initial data
 
     return render(request, 'nutrition/nutrition_form.html', {'form': form})
+
+
 # Update view
 def nutrition_update(request, pk):
     item = get_object_or_404(Nutrition, pk=pk)
@@ -125,6 +136,7 @@ def nutrition_update(request, pk):
 
     return render(request, 'nutrition/nutrition_form.html', {'form': form})
 
+
 # Delete view
 def nutrition_delete(request, pk):
     item = get_object_or_404(Nutrition, pk=pk)
@@ -132,4 +144,12 @@ def nutrition_delete(request, pk):
         item.delete()
         return JsonResponse({'success': True})  # JSON success response
     except Exception as e:
+
         return JsonResponse({'success': False, 'error': str(e)}, status=500)
+
+
+# Detail view
+
+def nutrition_detail(request, pk):
+    item = get_object_or_404(Nutrition, pk=pk)
+    return render(request, 'nutrition/nutrition_detail.html', {'item': item})
