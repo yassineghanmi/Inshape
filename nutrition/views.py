@@ -11,22 +11,24 @@ from .forms import BarcodeImageForm ,SearchForm
 import numpy as np
 import sweetify
 from django.http import JsonResponse
+from django.db.models import Sum ,Count
 # List view
 def nutrition_list(request):
     # Get the selected date from the request (if provided) or default to today
     selected_date = request.GET.get('date', timezone.now().date())
     
     # Get the search query from the request (if provided)
-    search_query = request.GET.get('search', '')  # Get the search query
+    search_query = request.GET.get('search', '').strip()  # Strip whitespace from the search query
 
-    # Filter nutrition items by the selected date and search query
+    # Filter nutrition items by the selected date
     items = Nutrition.objects.filter(created_at__date=selected_date)
-    
+
+    # If a search query is provided, filter items and ensure no duplicates
     if search_query:
-        items = items.filter(name__icontains=search_query)  # Filter by name using case-insensitive containment
-    
-    # Calculate the sum of calories
-    total_calories = sum(item.calories for item in items)
+        items = items.filter(name__icontains=search_query).distinct()  # Use distinct to avoid duplicates
+
+    # Calculate the sum of calories using Django's aggregation
+    total_calories = items.aggregate(Sum('calories'))['calories__sum'] or 0  # Use aggregate for better performance
 
     return render(request, 'nutrition/nutrition_list.html', {
         'items': items,
