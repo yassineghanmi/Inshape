@@ -1,39 +1,82 @@
-<h1>Nutrition List</h1>
+{% extends 'layout.html' %}
+{% load static %}
+{% block title %}Nutrition List{% endblock %}
+{% block content %}
+<section class="breadcrumb-section set-bg" data-setbg="{% static 'img/banner-bg.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb-text">
+                    <h2>Nutrition </h2>
+                    <div class="bt-option">
+                        <a href="./index.html">Home</a>
+                        <a href="#">Pages</a>
+                        <span>Nutrition List</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- Dropdown Button -->
-<div class="dropdown">
-    <button class="btn btn-secondary dropdown-toggle" type="button" id="addDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-        Add
-    </button>
-    <ul class="dropdown-menu" aria-labelledby="addDropdown">
-        <!-- Search bar -->
-        <li>
-            <form class="dropdown-item">
-                <input type="text" placeholder="Search..." aria-label="Search" class="form-control">
-            </form>
-        </li>
-        <!-- Add Manual option -->
-        <li><a class="dropdown-item" href="{% url 'nutrition_create' %}">Add Manual</a></li>
-        <!-- Add by Barcode option -->
-        <li><a class="dropdown-item" href="{% url 'add_by_barcode' %}">Add by Barcode</a></li>
-    </ul>
-</div>
 
+
+<section class="bmi-calculator-section spad">
+    
+<div class="container">
+    
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="text-404">
+                <form action="#" class="search-404">
+                    <input type="text" placeholder="Enter your keyword">
+                    <button type="submit"><i class="fa fa-search"></i></button>
+                </form>
+                
+            </div>
+        </div>
+    </div>
+    
 <!-- Date Selector -->
-<form method="get">
-    <label for="date">Select Date:</label>
+<form method="get" class="mb-4">
+    <label for="date" class="form-label">Select Date:</label>
     <input type="date" id="date" name="date" value="{{ selected_date }}" class="form-control" onchange="this.form.submit()">
 </form>
+ <!-- Add options --> <div class="chart-calculate-form">
+ <li><a class="dropdown-item" href="{% url 'nutrition_create' %}">Add Manual</a></li>
+ <li><a class="dropdown-item" href="{% url 'add_by_barcode' %}">Add by Barcode</a></li>
+ 
+</div>
 
 <!-- Nutrition items list -->
-<ul>
-    {% for item in items %}
-        <li>
-            {{ item.name }} ({{ item.created_at.date }}) - 
-            <a href="{% url 'nutrition_update' item.pk %}">Edit</a> | 
-            <a href="{% url 'nutrition_delete' item.pk %}">Delete</a>
-        </li>
-    {% empty %}
-        <li>No items found for this date.</li>
-    {% endfor %}
-</ul>
+ <div  class="chart-table"> 
+ <table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>calories</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item in items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td class="text-muted">{{ item.calories }}</td>
+                <td>
+                    <a href="{% url 'nutrition_update' item.pk %}" class="text-decoration-none me-2 text-success">Edit</a>
+                    |
+                    <a href="{% url 'nutrition_delete' item.pk %}" class="text-decoration-none ms-2 text-danger">Delete</a>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3" class="text-center text-muted">No items found for this date.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</section>
+{% endblock %}
