@@ -12,7 +12,7 @@ import numpy as np
 import sweetify
 from django.http import JsonResponse
 from django.db.models import Sum, Count
-
+from django.contrib.auth.decorators import login_required
 
 # List view
 def nutrition_list(request):
@@ -23,7 +23,12 @@ def nutrition_list(request):
     search_query = request.GET.get('search', '').strip()  # Strip whitespace from the search query
 
     # Filter nutrition items by the selected date
-    items = Nutrition.objects.filter(created_at__date=selected_date)
+
+    if search_query:
+        items = Nutrition.objects.filter(created_at__date=selected_date)
+    else:
+        items = Nutrition.objects.filter(created_at__date=selected_date, user=request.user)
+
 
     # If a search query is provided, filter items and ensure no duplicates
     if search_query:
@@ -90,6 +95,7 @@ def add_nutrition(request):
 
 
 # Create view
+@login_required
 def nutrition_create(request):
     if request.method == 'POST':
         form = NutritionForm(request.POST)
@@ -98,6 +104,8 @@ def nutrition_create(request):
             nutrition_item = form.save(commit=False)
             # Set created_at field to the current date and time
             nutrition_item.created_at = timezone.now()
+
+            nutrition_item.user = request.user
             # Save the instance
             nutrition_item.save()
             return redirect('nutrition_list')

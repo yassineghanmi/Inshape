@@ -1,5 +1,6 @@
 # models.py
 from django.db import models
+from django.contrib.auth.models import User
 
 class Nutrition(models.Model):
     name = models.CharField(max_length=100)  # Example field
@@ -10,6 +11,8 @@ class Nutrition(models.Model):
     fats = models.DecimalField(max_digits=5, decimal_places=2)
     created_at = models.DateTimeField(auto_now_add=False)
     updated_at = models.DateTimeField(auto_now=True)
+    # Add user field
+    user = models.CharField(max_length=100,null=True)
 
     def __str__(self):
         return self.name
