@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from .forms import RoutineForm  # Updated import for the new RoutineForm
 from .models import Routine  # Import your Routine model
@@ -16,18 +16,24 @@ generation_config = {
     "response_mime_type": "application/json",
 }
 model = genai.GenerativeModel(model_name="gemini-1.5-pro", generation_config=generation_config)
+
+
 def delete_routine(request, id):
     routine = get_object_or_404(Routine, id=id)
     routine.delete()
     return redirect('success_url')
+
+
 class RoutineDetailView(View):
     def get(self, request, id):
         routine = get_object_or_404(Routine, id=id)
 
         # Deserialize the JSON string in routine.details
         routine.details = json.loads(routine.details)  # Ensure 'details' is a JSON string in the database
-        
+
         return render(request, 'routine_planner/routine_detail.html', {'routine': routine})
+
+
 def workout_view(request):
     if request.method == 'POST':
         # Collect input data from the form
@@ -57,143 +63,141 @@ def workout_view(request):
 
         # Format the prompt for the AI
         prompt = (
-    f"Create a workout routine based on this data {workout_data}, ensuring it follows this exact JSON structure. "
-    "Do not alter any fields or structure; fill in the fields with specific details as applicable to the user’s input. "
-    "Use the same field names, order, and structure as in the template provided below:\n"
-    "{\n"
-    "  \"routine\": {\n" \
-    "    \"Monday\": {\n" \
-    "      \"name\": \"\",\n" \
-    "      \"duration\": 0,\n" \
-    "      \"exercises\": [\n" \
-    "        {\n" \
-    "          \"name\": \"\",\n" \
-    "          \"sets\": 0,\n" \
-    "          \"reps\": \"\",\n" \
-    "          \"rest\": 0,\n" \
-    "          \"equipment\": \"\"\n" \
-    "        }\n" \
-    "      ],\n" \
-    "      \"cardio\": {\n" \
-    "        \"type\": \"\",\n" \
-    "        \"duration\": 0,\n" \
-    "        \"intensity\": \"\"\n" \
-    "      }\n" \
-    "    },\n" \
-    "    \"Tuesday\": {\n" \
-    "      \"name\": \"\",\n" \
-    "      \"duration\": 0,\n" \
-    "      \"exercises\": [\n" \
-    "        {\n" \
-    "          \"name\": \"\",\n" \
-    "          \"sets\": 0,\n" \
-    "          \"reps\": \"\",\n" \
-    "          \"rest\": 0,\n" \
-    "          \"equipment\": \"\"\n" \
-    "        }\n" \
-    "      ],\n" \
-    "      \"cardio\": {\n" \
-    "        \"type\": \"\",\n" \
-    "        \"duration\": 0,\n" \
-    "        \"intensity\": \"\"\n" \
-    "      }\n" \
-    "    },\n" \
-    "    \"Wednesday\": {\n" \
-    "      \"name\": \"\",\n" \
-    "      \"duration\": 0,\n" \
-    "      \"exercises\": [\n" \
-    "        {\n" \
-    "          \"name\": \"\",\n" \
-    "          \"sets\": 0,\n" \
-    "          \"reps\": \"\",\n" \
-    "          \"rest\": 0,\n" \
-    "          \"equipment\": \"\"\n" \
-    "        }\n" \
-    "      ],\n" \
-    "      \"cardio\": {\n" \
-    "        \"type\": \"\",\n" \
-    "        \"duration\": 0,\n" \
-    "        \"intensity\": \"\"\n" \
-    "      }\n" \
-    "    },\n" \
-    "    \"Thursday\": {\n" \
-    "      \"name\": \"\",\n" \
-    "      \"duration\": 0,\n" \
-    "      \"exercises\": [\n" \
-    "        {\n" \
-    "          \"name\": \"\",\n" \
-    "          \"sets\": 0,\n" \
-    "          \"reps\": \"\",\n" \
-    "          \"rest\": 0,\n" \
-    "          \"equipment\": \"\"\n" \
-    "        }\n" \
-    "      ],\n" \
-    "      \"cardio\": {\n" \
-    "        \"type\": \"\",\n" \
-    "        \"duration\": 0,\n" \
-    "        \"intensity\": \"\"\n" \
-    "      }\n" \
-    "    },\n" \
-    "    \"Friday\": {\n" \
-    "      \"name\": \"\",\n" \
-    "      \"duration\": 0,\n" \
-    "      \"exercises\": [\n" \
-    "        {\n" \
-    "          \"name\": \"\",\n" \
-    "          \"sets\": 0,\n" \
-    "          \"reps\": \"\",\n" \
-    "          \"rest\": 0,\n" \
-    "          \"equipment\": \"\"\n" \
-    "        }\n" \
-    "      ],\n" \
-    "      \"cardio\": {\n" \
-    "        \"type\": \"\",\n" \
-    "        \"duration\": 0,\n" \
-    "        \"intensity\": \"\"\n" \
-    "      }\n" \
-    "    },\n" \
-    "    \"Saturday\": {\n" \
-    "      \"name\": \"\",\n" \
-    "      \"duration\": 0,\n" \
-    "      \"exercises\": [\n" \
-    "        {\n" \
-    "          \"name\": \"\",\n" \
-    "          \"sets\": 0,\n" \
-    "          \"reps\": \"\",\n" \
-    "          \"rest\": 0,\n" \
-    "          \"equipment\": \"\"\n" \
-    "        }\n" \
-    "      ],\n" \
-    "      \"cardio\": {\n" \
-    "        \"type\": \"\",\n" \
-    "        \"duration\": 0,\n" \
-    "        \"intensity\": \"\"\n" \
-    "      }\n" \
-    "    },\n" \
-    "    \"Sunday\": {\n" \
-    "      \"name\": \"\",\n" \
-    "      \"duration\": 0,\n" \
-    "      \"exercises\": [\n" \
-    "        {\n" \
-    "          \"name\": \"\",\n" \
-    "          \"sets\": 0,\n" \
-    "          \"reps\": \"\",\n" \
-    "          \"rest\": 0,\n" \
-    "          \"equipment\": \"\"\n" \
-    "        }\n" \
-    "      ],\n" \
-    "      \"cardio\": {\n" \
-    "        \"type\": \"\",\n" \
-    "        \"duration\": 0,\n" \
-    "        \"intensity\": \"\"\n" \
-    "      }\n" \
-    "    }\n" \
-    "  },\n" \
-    "  \"notes\": \"\"\n" \
-    "}"
-)
-
-
+            f"Create a workout routine based on this data {workout_data}, ensuring it follows this exact JSON structure. "
+            "Do not alter any fields or structure; fill in the fields with specific details as applicable to the user’s input. "
+            "Use the same field names, order, and structure as in the template provided below:\n"
+            "{\n"
+            "  \"routine\": {\n" \
+            "    \"Monday\": {\n" \
+            "      \"name\": \"\",\n" \
+            "      \"duration\": 0,\n" \
+            "      \"exercises\": [\n" \
+            "        {\n" \
+            "          \"name\": \"\",\n" \
+            "          \"sets\": 0,\n" \
+            "          \"reps\": \"\",\n" \
+            "          \"rest\": 0,\n" \
+            "          \"equipment\": \"\"\n" \
+            "        }\n" \
+            "      ],\n" \
+            "      \"cardio\": {\n" \
+            "        \"type\": \"\",\n" \
+            "        \"duration\": 0,\n" \
+            "        \"intensity\": \"\"\n" \
+            "      }\n" \
+            "    },\n" \
+            "    \"Tuesday\": {\n" \
+            "      \"name\": \"\",\n" \
+            "      \"duration\": 0,\n" \
+            "      \"exercises\": [\n" \
+            "        {\n" \
+            "          \"name\": \"\",\n" \
+            "          \"sets\": 0,\n" \
+            "          \"reps\": \"\",\n" \
+            "          \"rest\": 0,\n" \
+            "          \"equipment\": \"\"\n" \
+            "        }\n" \
+            "      ],\n" \
+            "      \"cardio\": {\n" \
+            "        \"type\": \"\",\n" \
+            "        \"duration\": 0,\n" \
+            "        \"intensity\": \"\"\n" \
+            "      }\n" \
+            "    },\n" \
+            "    \"Wednesday\": {\n" \
+            "      \"name\": \"\",\n" \
+            "      \"duration\": 0,\n" \
+            "      \"exercises\": [\n" \
+            "        {\n" \
+            "          \"name\": \"\",\n" \
+            "          \"sets\": 0,\n" \
+            "          \"reps\": \"\",\n" \
+            "          \"rest\": 0,\n" \
+            "          \"equipment\": \"\"\n" \
+            "        }\n" \
+            "      ],\n" \
+            "      \"cardio\": {\n" \
+            "        \"type\": \"\",\n" \
+            "        \"duration\": 0,\n" \
+            "        \"intensity\": \"\"\n" \
+            "      }\n" \
+            "    },\n" \
+            "    \"Thursday\": {\n" \
+            "      \"name\": \"\",\n" \
+            "      \"duration\": 0,\n" \
+            "      \"exercises\": [\n" \
+            "        {\n" \
+            "          \"name\": \"\",\n" \
+            "          \"sets\": 0,\n" \
+            "          \"reps\": \"\",\n" \
+            "          \"rest\": 0,\n" \
+            "          \"equipment\": \"\"\n" \
+            "        }\n" \
+            "      ],\n" \
+            "      \"cardio\": {\n" \
+            "        \"type\": \"\",\n" \
+            "        \"duration\": 0,\n" \
+            "        \"intensity\": \"\"\n" \
+            "      }\n" \
+            "    },\n" \
+            "    \"Friday\": {\n" \
+            "      \"name\": \"\",\n" \
+            "      \"duration\": 0,\n" \
+            "      \"exercises\": [\n" \
+            "        {\n" \
+            "          \"name\": \"\",\n" \
+            "          \"sets\": 0,\n" \
+            "          \"reps\": \"\",\n" \
+            "          \"rest\": 0,\n" \
+            "          \"equipment\": \"\"\n" \
+            "        }\n" \
+            "      ],\n" \
+            "      \"cardio\": {\n" \
+            "        \"type\": \"\",\n" \
+            "        \"duration\": 0,\n" \
+            "        \"intensity\": \"\"\n" \
+            "      }\n" \
+            "    },\n" \
+            "    \"Saturday\": {\n" \
+            "      \"name\": \"\",\n" \
+            "      \"duration\": 0,\n" \
+            "      \"exercises\": [\n" \
+            "        {\n" \
+            "          \"name\": \"\",\n" \
+            "          \"sets\": 0,\n" \
+            "          \"reps\": \"\",\n" \
+            "          \"rest\": 0,\n" \
+            "          \"equipment\": \"\"\n" \
+            "        }\n" \
+            "      ],\n" \
+            "      \"cardio\": {\n" \
+            "        \"type\": \"\",\n" \
+            "        \"duration\": 0,\n" \
+            "        \"intensity\": \"\"\n" \
+            "      }\n" \
+            "    },\n" \
+            "    \"Sunday\": {\n" \
+            "      \"name\": \"\",\n" \
+            "      \"duration\": 0,\n" \
+            "      \"exercises\": [\n" \
+            "        {\n" \
+            "          \"name\": \"\",\n" \
+            "          \"sets\": 0,\n" \
+            "          \"reps\": \"\",\n" \
+            "          \"rest\": 0,\n" \
+            "          \"equipment\": \"\"\n" \
+            "        }\n" \
+            "      ],\n" \
+            "      \"cardio\": {\n" \
+            "        \"type\": \"\",\n" \
+            "        \"duration\": 0,\n" \
+            "        \"intensity\": \"\"\n" \
+            "      }\n" \
+            "    }\n" \
+            "  },\n" \
+            "  \"notes\": \"\"\n" \
+            "}"
+        )
 
         # Start a chat session and send the prompt to the AI
         chat_session = model.start_chat()
@@ -214,12 +218,12 @@ def workout_view(request):
 def save_routine(request):
     if request.method == 'POST':
         routine_name = request.POST.get('routine_name')
-        created_by = request.POST.get('created_by')
+        created_by = request.user
         details = request.POST.get('generated_routine')
-        
+
         if not details:
             print("Details are empty!")
-        
+
         # Debugging: Print out the values
         print(f"Routine Name: {routine_name}, Created By: {created_by}, Details: {details}")
 
@@ -237,9 +241,10 @@ def save_routine(request):
 
     return redirect('workout_form')
 
+
 def success_view(request):
-    routines = Routine.objects.all()  # Retrieve all routines from the database
-    
+    routines = Routine.objects.filter(created_by=request.user)  # Filter by logged-in user
+
     # Parse the details for each routine
     for routine in routines:
         try:
@@ -248,9 +253,11 @@ def success_view(request):
             routine.details = {}  # If parsing fails, set to empty dict or handle accordingly
 
     return render(request, 'routine_planner/success.html', {'routines': routines})
+
+
 def edit_routine(request, routine_id):
     routine = get_object_or_404(Routine, id=routine_id)
-    
+
     if request.method == 'POST':
         form = RoutineForm(request.POST, instance=routine)
         if form.is_valid():
@@ -258,5 +265,5 @@ def edit_routine(request, routine_id):
             return redirect('routine_detail', id=routine.id)  # Use 'id' here
     else:
         form = RoutineForm(instance=routine)
-    
+
     return render(request, 'routine_planner/edit_routine.html', {'form': form, 'routine': routine})
