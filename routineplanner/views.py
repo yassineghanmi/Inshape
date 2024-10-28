@@ -33,7 +33,8 @@ class RoutineDetailView(View):
 
         return render(request, 'routine_planner/routine_detail.html', {'routine': routine})
 
-
+from django.contrib.auth.decorators import login_required
+@login_required(login_url='/accounts/login')
 def workout_view(request):
     if request.method == 'POST':
         # Collect input data from the form
@@ -243,7 +244,12 @@ def save_routine(request):
 
 
 def success_view(request):
-    routines = Routine.objects.filter(created_by=request.user)  # Filter by logged-in user
+    if request.user.is_authenticated:
+        # If the user is logged in, filter routines by the logged-in user
+        routines = Routine.objects.filter(created_by=request.user)
+    else:
+        # If the user is not logged in, get all routines
+        routines = Routine.objects.all()
 
     # Parse the details for each routine
     for routine in routines:
@@ -253,7 +259,6 @@ def success_view(request):
             routine.details = {}  # If parsing fails, set to empty dict or handle accordingly
 
     return render(request, 'routine_planner/success.html', {'routines': routines})
-
 
 def edit_routine(request, routine_id):
     routine = get_object_or_404(Routine, id=routine_id)

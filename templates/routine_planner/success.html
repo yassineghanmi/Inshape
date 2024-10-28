@@ -39,18 +39,23 @@
                         <h4><i class="fa fa-clipboard-list"></i> {{ routine.name }}</h4>
                         <p><strong><i class="fa fa-user"></i> Created By:</strong> {{ routine.created_by }}</p>
                         <a href="{% url 'routine_detail' routine.id %}" class="btn btn-outline-primary">View Details</a>
-                        <!-- Delete Button -->
-                        <form action="{% url 'delete_routine' routine.id %}" method="post" style="display:inline;">
-                            {% csrf_token %}
-                            <button class="delete-button" type="button" onclick="confirmDelete(event, this)">
-                                <i class="fa fa-trash"></i> <!-- FontAwesome trash icon -->
-                            </button>
-                        </form>
+
+                        <!-- Delete Button only for logged-in users -->
+                        {% if user.is_authenticated %}
+                            <form action="{% url 'delete_routine' routine.id %}" method="post" style="display:inline;">
+                                {% csrf_token %}
+                                <button class="delete-button" type="button" onclick="confirmDelete(event, this)">
+                                    <i class="fa fa-trash"></i> <!-- FontAwesome trash icon -->
+                                </button>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             {% empty %}
-                <div class="col-lg-12">
+                <div class="col-lg-12 text-center">
                     <p>No routines found.</p>
+                    <p>Please add a routine.</p>
+                    <a href="{% url 'workout_view' %}" class="btn btn-primary">Generate Routines</a>
                 </div>
             {% endfor %}
         </div>

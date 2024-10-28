@@ -23,7 +23,9 @@
         <div class="back-link" >
             <a href="{% url 'success_url' %}" class="btn back-to-routines">Back to Routines</a>
             <div style=""></div>
+            {% if user.is_authenticated %}
             <a href="{% url 'edit_routine' routine.id %}" style="margin-left:10px;" class="btn back-to-routines">Edit Routine</a>
+             {% endif %}
         </div>
         
         <div class="routine-details">

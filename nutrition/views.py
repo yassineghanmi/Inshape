@@ -15,6 +15,8 @@ from django.db.models import Sum, Count
 from django.contrib.auth.decorators import login_required
 
 # List view
+from django.contrib.auth.decorators import login_required
+@login_required(login_url='/accounts/login')
 def nutrition_list(request):
     # Get the selected date from the request (if provided) or default to today
     selected_date = request.GET.get('date', timezone.now().date())
